@@ -1,3 +1,5 @@
+use numflex::*;
+
 fn main() {
-    println!("Hello, world!");
+    println!("{}", (-3.4).atrunc());
 }
