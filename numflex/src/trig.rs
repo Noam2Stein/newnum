@@ -16,6 +16,24 @@ pub trait ATrig {
     fn acot(self) -> Self::Output;
 }
 
+pub trait TrigH {
+    type Output;
+
+    fn sinh(self) -> Self::Output;
+    fn cosh(self) -> Self::Output;
+    fn tanh(self) -> Self::Output;
+    fn coth(self) -> Self::Output;
+}
+
+pub trait ATrigH {
+    type Output;
+
+    fn asinh(self) -> Self::Output;
+    fn acosh(self) -> Self::Output;
+    fn atanh(self) -> Self::Output;
+    fn acoth(self) -> Self::Output;
+}
+
 macro_rules! impl_for_primitive {
     ($type:ty) => {
         impl Trig for $type {
@@ -57,6 +75,48 @@ macro_rules! impl_for_primitive {
             #[inline(always)]
             fn acot(self) -> Self::Output {
                 (1.0 / self).atan()
+            }
+        }
+
+        impl TrigH for $type {
+            type Output = Self;
+
+            #[inline(always)]
+            fn sinh(self) -> Self::Output {
+                self.sinh()
+            }
+            #[inline(always)]
+            fn cosh(self) -> Self::Output {
+                self.cosh()
+            }
+            #[inline(always)]
+            fn tanh(self) -> Self::Output {
+                self.tanh()
+            }
+            #[inline(always)]
+            fn coth(self) -> Self::Output {
+                1.0 / self.tanh()
+            }
+        }
+
+        impl ATrigH for $type {
+            type Output = Self;
+
+            #[inline(always)]
+            fn asinh(self) -> Self::Output {
+                self.asinh()
+            }
+            #[inline(always)]
+            fn acosh(self) -> Self::Output {
+                self.acosh()
+            }
+            #[inline(always)]
+            fn atanh(self) -> Self::Output {
+                self.atanh()
+            }
+            #[inline(always)]
+            fn acoth(self) -> Self::Output {
+                (1.0 / self).atanh()
             }
         }
     };

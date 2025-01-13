@@ -1,11 +1,13 @@
 use std::ops::{Add, AddAssign, Sub, SubAssign};
 
+mod abs_diff;
 mod primitive;
 mod root;
 mod round;
 mod sign;
 mod trig;
 mod values;
+pub use abs_diff::*;
 pub use primitive::*;
 pub use root::*;
 pub use round::*;
@@ -22,6 +24,7 @@ pub trait Num:
     + Sub<Output = Self>
     + AddAssign
     + SubAssign
+    + AbsDiff<Output = Self>
 {
 }
 

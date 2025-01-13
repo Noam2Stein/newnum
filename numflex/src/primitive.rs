@@ -8,8 +8,8 @@ use std::{
 };
 
 use crate::{
-    ATrig, Cbrt, NegOne, NegThree, NegTwo, Negative, NotNegative, Num, One, Positive, Sqrt, Three,
-    Trig, Two, Whole, Zero,
+    ATrig, ATrigH, Cbrt, NegOne, NegThree, NegTwo, Negative, NotNegative, Num, One, Positive, Sqrt,
+    Three, Trig, TrigH, Two, Whole, Zero,
 };
 
 macro_rules! code_for_primitives {
@@ -22,12 +22,12 @@ macro_rules! code_for_primitives {
                 fn $as_fn(self) -> $type;
             )*
 
-            fn as_num<T: NumPrimitive>(self) -> T {
+            fn as_num<T: Pri>(self) -> T {
                 T::from_num(self)
             }
         }
 
-        pub trait NumPrimitive:
+        pub trait Pri:
             Num
             + Positive
             + Zero
@@ -53,7 +53,7 @@ macro_rules! code_for_primitives {
         }
 
         $(
-            impl NumPrimitive for $type {
+            impl Pri for $type {
                 #[inline(always)]
                 fn from_num<T: AsPrimitive>(value: T) -> Self {
                     value.$as_fn()
@@ -93,7 +93,7 @@ code_for_primitives!(
 );
 
 pub trait Int:
-    NumPrimitive
+    Pri
     + Whole
     + Not<Output = Self>
     + Shl<Output = Self>
@@ -112,13 +112,22 @@ pub trait Int:
 {
 }
 
-pub trait SignedPrimitive: NumPrimitive + Negative + NegOne + NegTwo + NegThree + Neg {}
-pub trait UnsignedPrimitive: NumPrimitive + NotNegative {}
+pub trait SignedPrimitive:
+    Pri + Negative + NegOne + NegTwo + NegThree + Neg<Output = Self>
+{
+}
+pub trait UnsignedPrimitive: Pri + NotNegative {}
 
 pub trait SInt: Int + SignedPrimitive {}
 pub trait UInt: Int + UnsignedPrimitive {}
 pub trait Float:
-    SignedPrimitive + Sqrt<Output = Self> + Cbrt<Output = Self> + Trig + ATrig
+    SignedPrimitive
+    + Sqrt<Output = Self>
+    + Cbrt<Output = Self>
+    + Trig<Output = Self>
+    + ATrig<Output = Self>
+    + TrigH<Output = Self>
+    + ATrigH<Output = Self>
 {
 }
 
