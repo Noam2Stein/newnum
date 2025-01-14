@@ -1,6 +1,7 @@
-use std::ops::{Add, AddAssign, Sub, SubAssign};
+use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Rem, RemAssign, Sub, SubAssign};
 
 mod abs_diff;
+mod from_primitives;
 mod primitive;
 mod root;
 mod round;
@@ -8,6 +9,7 @@ mod sign;
 mod trig;
 mod values;
 pub use abs_diff::*;
+pub use from_primitives::*;
 pub use primitive::*;
 pub use root::*;
 pub use round::*;
@@ -16,15 +18,23 @@ pub use trig::*;
 pub use values::*;
 
 pub trait Num:
-    MaybeSigned
+    AbsDiff<Output = Self>
+    + Sqrt<Output = Self>
+    + Cbrt<Output = Self>
     + Round
+    + MaybeSigned
     + PartialEq
     + PartialOrd
     + Add<Output = Self>
     + Sub<Output = Self>
+    + Mul<Output = Self>
+    + Div<Output = Self>
+    + Rem<Output = Self>
     + AddAssign
     + SubAssign
-    + AbsDiff<Output = Self>
+    + MulAssign
+    + DivAssign
+    + RemAssign
 {
 }
 
