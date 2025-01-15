@@ -1,6 +1,11 @@
 [package]
-edition = "2021"
-name    = "renum"
-version = "0.1.0"
+categories  = [ "data-structures", "mathematics" ]
+description = "traits for number API and hierarchy"
+edition     = "2021"
+license     = "MIT"
+name        = "renum"
+readme      = "../README.md"
+repository  = "https://github.com/Noam2Stein/renum"
+version     = "0.0.1"
 
 [dependencies]
