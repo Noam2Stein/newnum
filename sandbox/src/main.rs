@@ -1,4 +1,4 @@
-use numflex::*;
+use renum::*;
 
 fn main() {
     println!("{}", test(5.0, 2.5));
