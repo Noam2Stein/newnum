@@ -1,15 +1,13 @@
-pub trait AbsDiff<Rhs = Self> {
-    type Output;
+use std::ops::Sub;
 
-    fn abs_diff(self, rhs: Rhs) -> Self::Output;
+pub trait AbsDiff: Sized + Sub {
+    fn abs_diff(self, rhs: Self) -> Self::Output;
 }
 
 macro_rules! impl_for_unsigned {
     ($($type:ty)*) => {
         $(
             impl AbsDiff for $type {
-                type Output = Self;
-
                 #[inline(always)]
                 fn abs_diff(self, rhs: Self) -> Self::Output {
                     if self > rhs {
@@ -28,8 +26,6 @@ macro_rules! impl_for_signed {
     ($($type:ty)*) => {
         $(
             impl AbsDiff for $type {
-                type Output = Self;
-
                 #[inline(always)]
                 fn abs_diff(self, rhs: Self) -> Self::Output {
                     (self - rhs).abs()
