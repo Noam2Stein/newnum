@@ -1,11 +1,12 @@
-use crate::Zero;
-
 pub trait MaybeSigned: Sized {
     fn is_positive(&self) -> bool;
     fn is_negative(&self) -> bool;
     fn signum(self) -> Self;
 }
 
+pub trait Zero: MaybeSigned {
+    const ZERO: Self;
+}
 pub trait Positive: MaybeSigned {
     fn abs(self) -> Self;
 }
@@ -51,6 +52,9 @@ macro_rules! impl_sign_for_unsigned_ints {
                 (self != 0) as $type
             }
         }
+        impl Zero for $type {
+            const ZERO: Self = 0;
+        }
         impl Positive for $type {
             #[inline(always)]
             fn abs(self) -> Self {
@@ -77,6 +81,9 @@ macro_rules! impl_sign_for_signed_ints {
             fn signum(self) -> Self {
                 self.signum()
             }
+        }
+        impl Zero for $type {
+            const ZERO: Self = 0;
         }
         impl Positive for $type {
             #[inline(always)]
@@ -129,6 +136,13 @@ impl MaybeSigned for f64 {
             self.signum()
         }
     }
+}
+
+impl Zero for f32 {
+    const ZERO: Self = 0.0;
+}
+impl Zero for f64 {
+    const ZERO: Self = 0.0;
 }
 
 impl Positive for f32 {

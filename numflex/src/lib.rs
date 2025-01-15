@@ -7,7 +7,6 @@ mod root;
 mod round;
 mod sign;
 mod trig;
-mod values;
 pub use abs_diff::*;
 pub use from_primitives::*;
 pub use primitive::*;
@@ -15,7 +14,6 @@ pub use root::*;
 pub use round::*;
 pub use sign::*;
 pub use trig::*;
-pub use values::*;
 
 pub trait Num:
     AbsDiff<Output = Self>
