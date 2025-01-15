@@ -8,8 +8,8 @@ use std::{
 };
 
 use crate::{
-    ATrig, ATrigH, Cbrt, NegOne, NegThree, NegTwo, Negative, NotNegative, Num, One, Positive, Sqrt,
-    Three, Trig, TrigH, Two, Whole, Zero,
+    ATrig, ATrigH, Cbrt, FromI8, FromU8, NegOne, NegThree, NegTwo, Negative, NotNegative, Num, One,
+    Positive, Sqrt, Three, Trig, TrigH, Two, Whole, Zero,
 };
 
 macro_rules! code_for_primitives {
@@ -113,10 +113,10 @@ pub trait Int:
 }
 
 pub trait SignedPrimitive:
-    Pri + Negative + NegOne + NegTwo + NegThree + Neg<Output = Self>
+    Pri + Negative + NegOne + NegTwo + NegThree + Neg<Output = Self> + FromI8
 {
 }
-pub trait UnsignedPrimitive: Pri + NotNegative {}
+pub trait UnsignedPrimitive: Pri + NotNegative + FromU8 {}
 
 pub trait SInt: Int + SignedPrimitive {}
 pub trait UInt: Int + UnsignedPrimitive {}
