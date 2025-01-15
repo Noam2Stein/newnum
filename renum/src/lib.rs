@@ -15,6 +15,14 @@ pub use round::*;
 pub use sign::*;
 pub use trig::*;
 
+/// Trait for types that represent abstract numbers.
+/// Requires ```+-*/%=<>``` opeartors.
+///
+/// can be implemented by non primitives! for a primitives only trait use [```Pri```].
+///
+/// Can't nessesarely represent ```0```, ```1``` or any common value.
+/// For basic positive values add ``` + FromU8```,
+/// for negative values as well add ``` + FromI8```.
 pub trait Num:
     AbsDiff<Output = Self>
     + Sqrt<Output = Self>
