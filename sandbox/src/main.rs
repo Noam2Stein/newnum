@@ -1,4 +1,4 @@
-use renum::*;
+use newnum::*;
 
 fn main() {
     println!("{}", test(5.0, 2.5));
