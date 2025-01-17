@@ -28,7 +28,7 @@ pub trait Num:
     + Sqrt<Output = Self>
     + Cbrt<Output = Self>
     + Round
-    + MaybeSigned
+    + Sign<Bool = bool>
     + PartialEq
     + PartialOrd
     + Add<Output = Self>

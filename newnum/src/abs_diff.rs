@@ -4,7 +4,7 @@ pub trait AbsDiff: Sized + Sub {
     fn abs_diff(self, rhs: Self) -> Self::Output;
 }
 
-macro_rules! impl_for_unsigned {
+macro_rules! impl_abs_diff_for_uints {
     ($($type:ty)*) => {
         $(
             impl AbsDiff for $type {
@@ -20,9 +20,9 @@ macro_rules! impl_for_unsigned {
         )*
     };
 }
-impl_for_unsigned!(u8 u16 u32 u64 u128 usize);
+impl_abs_diff_for_uints!(u8 u16 u32 u64 u128 usize);
 
-macro_rules! impl_for_signed {
+macro_rules! impl_abs_diff_for_sints {
     ($($type:ty)*) => {
         $(
             impl AbsDiff for $type {
@@ -34,4 +34,4 @@ macro_rules! impl_for_signed {
         )*
     };
 }
-impl_for_signed!(i8 i16 i32 i64 i128 isize f32 f64);
+impl_abs_diff_for_sints!(i8 i16 i32 i64 i128 isize f32 f64);

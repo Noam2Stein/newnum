@@ -12,27 +12,27 @@ use crate::{
     TrigH, Whole, Zero,
 };
 
-macro_rules! code_for_primitives {
+macro_rules! code_for_Prims {
     ($($type:ident($as_fn:ident),)*) => {
-        code_for_primitives!($ident $($type($as_fn),)*);
+        code_for_Prims!($ident $($type($as_fn),)*);
     };
     ($dollar:tt $_:ident $($type:ident($as_fn:ident),)*) => {
-        pub trait AsPrimitive: Sized {
+        pub trait AsPrim: Sized {
             $(
                 fn $as_fn(self) -> $type;
             )*
 
-            fn as_num<T: Pri>(self) -> T {
+            fn as_num<T: Prim>(self) -> T {
                 T::from_num(self)
             }
         }
 
-        pub trait Pri:
+        pub trait Prim:
             Num
             + FromU7
             + Zero
             + Positive
-            + AsPrimitive
+            + AsPrim
             + Mul<Output = Self>
             + Div<Output = Self>
             + Rem<Output = Self>
@@ -47,21 +47,21 @@ macro_rules! code_for_primitives {
             + Copy
             + Default
         {
-            fn from_num<T: AsPrimitive>(value: T) -> Self;
+            fn from_num<T: AsPrim>(value: T) -> Self;
         }
 
         $(
-            impl Pri for $type {
+            impl Prim for $type {
                 #[inline(always)]
-                fn from_num<T: AsPrimitive>(value: T) -> Self {
+                fn from_num<T: AsPrim>(value: T) -> Self {
                     value.$as_fn()
                 }
             }
         )*
 
-        macro_rules! impl_as_primitives {
+        macro_rules! impl_as_Prims {
             ($dollar($type2:ident($as_fn2:ident),)*) => {$(
-                impl AsPrimitive for $type {
+                impl AsPrim for $type {
                     $dollar(
                         fn $as_fn2(self) -> $type2 {
                             self as _
@@ -70,10 +70,10 @@ macro_rules! code_for_primitives {
                 }
             )*}
         }
-        impl_as_primitives!($($type($as_fn),)*);
+        impl_as_Prims!($($type($as_fn),)*);
     };
 }
-code_for_primitives!(
+code_for_Prims!(
     u8(as_u8),
     u16(as_u16),
     u32(as_u32),
@@ -91,7 +91,7 @@ code_for_primitives!(
 );
 
 pub trait Int:
-    Pri
+    Prim
     + Whole
     + Not<Output = Self>
     + Shl<Output = Self>
@@ -110,13 +110,13 @@ pub trait Int:
 {
 }
 
-pub trait SignedPrimitive: Pri + Negative + Neg<Output = Self> + FromI8 {}
-pub trait UnsignedPrimitive: Pri + NotNegative + FromU8 {}
+pub trait SignedPrim: Prim + Negative + Neg<Output = Self> + FromI8 {}
+pub trait UnsignedPrim: Prim + NotNegative + FromU8 {}
 
-pub trait SInt: Int + SignedPrimitive {}
-pub trait UInt: Int + UnsignedPrimitive {}
+pub trait SInt: Int + SignedPrim {}
+pub trait UInt: Int + UnsignedPrim {}
 pub trait Float:
-    SignedPrimitive
+    SignedPrim
     + Sqrt<Output = Self>
     + Cbrt<Output = Self>
     + Trig<Output = Self>
@@ -154,18 +154,18 @@ impl Int for i64 {}
 impl Int for i128 {}
 impl Int for isize {}
 
-impl SignedPrimitive for i8 {}
-impl SignedPrimitive for i16 {}
-impl SignedPrimitive for i32 {}
-impl SignedPrimitive for i64 {}
-impl SignedPrimitive for i128 {}
-impl SignedPrimitive for isize {}
-impl SignedPrimitive for f32 {}
-impl SignedPrimitive for f64 {}
+impl SignedPrim for i8 {}
+impl SignedPrim for i16 {}
+impl SignedPrim for i32 {}
+impl SignedPrim for i64 {}
+impl SignedPrim for i128 {}
+impl SignedPrim for isize {}
+impl SignedPrim for f32 {}
+impl SignedPrim for f64 {}
 
-impl UnsignedPrimitive for u8 {}
-impl UnsignedPrimitive for u16 {}
-impl UnsignedPrimitive for u32 {}
-impl UnsignedPrimitive for u64 {}
-impl UnsignedPrimitive for u128 {}
-impl UnsignedPrimitive for usize {}
+impl UnsignedPrim for u8 {}
+impl UnsignedPrim for u16 {}
+impl UnsignedPrim for u32 {}
+impl UnsignedPrim for u64 {}
+impl UnsignedPrim for u128 {}
+impl UnsignedPrim for usize {}
