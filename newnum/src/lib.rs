@@ -1,19 +1,11 @@
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Rem, RemAssign, Sub, SubAssign};
 
-mod abs_diff;
-mod from_primitives;
+mod api;
 mod primitive;
-mod root;
-mod round;
-mod sign;
-mod trig;
-pub use abs_diff::*;
-pub use from_primitives::*;
+mod range;
+pub use api::*;
 pub use primitive::*;
-pub use root::*;
-pub use round::*;
-pub use sign::*;
-pub use trig::*;
+pub use range::*;
 
 /// Trait for types that represent abstract numbers.
 /// Requires ```+-*/%=<>``` opeartors.
@@ -25,8 +17,7 @@ pub use trig::*;
 /// for negative values as well add ``` + FromI8```.
 pub trait Num:
     AbsDiff<Output = Self>
-    + Sqrt<Output = Self>
-    + Cbrt<Output = Self>
+    + TruncRoot
     + Round
     + Sign<Bool = bool>
     + PartialEq
