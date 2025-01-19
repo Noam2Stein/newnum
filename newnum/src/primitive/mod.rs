@@ -1,6 +1,6 @@
 use std::fmt::{Debug, Display};
 
-use crate::{FloatingEquivalent, FromU7, IRoot, IRound, Num, TruncRoot, WholeEquivalent};
+use crate::{FromU7, IRoot, IRound, Num, TruncRoot, WholeEquivalent};
 
 mod float;
 mod int;
@@ -15,6 +15,32 @@ pub use sint::*;
 pub use uint::*;
 pub use unsigned::*;
 
+/// Trait for number primitives (```u8```, ```i32```, ```f64```...).
+///
+/// Can be implemented by non ```std``` types that follow the primitive rules:
+/// * Can represent 0..=127
+/// * ```Default``` returns ```0```
+/// * implements ```Send + Sync + Debug + Display + Copy```
+/// * Can be failibly converted to any std primitive
+pub trait Prim:
+    Num
+    + AsPrim
+    + WholeEquivalent
+    + FromU7
+    + TruncRoot
+    + IRoot
+    + IRound
+    + Send
+    + Sync
+    + Debug
+    + Display
+    + Clone
+    + Copy
+    + Default
+{
+    fn from_num<T: AsPrim>(value: T) -> Self;
+}
+
 macro_rules! code_for_prims {
     ($($type:ident($as_fn:ident),)*) => {
         code_for_prims!($ident $($type($as_fn),)*);
@@ -28,33 +54,6 @@ macro_rules! code_for_prims {
             fn as_num<T: Prim>(self) -> T {
                 T::from_num(self)
             }
-        }
-
-        /// Trait for number primitives (```u8```, ```i32```, ```f64```...).
-        ///
-        /// Can be implemented by non ```std``` types that follow the primitive rules:
-        /// * Can represent 0..=127
-        /// * ```Default``` returns ```0```
-        /// * implements ```Send + Sync + Debug + Display + Copy```
-        /// * Can be failibly converted to any std primitive
-        pub trait Prim:
-            Num
-            + AsPrim
-            + WholeEquivalent
-            + FloatingEquivalent
-            + FromU7
-            + TruncRoot
-            + IRoot
-            + IRound
-            + Send
-            + Sync
-            + Debug
-            + Display
-            + Clone
-            + Copy
-            + Default
-        {
-            fn from_num<T: AsPrim>(value: T) -> Self;
         }
 
         $(
