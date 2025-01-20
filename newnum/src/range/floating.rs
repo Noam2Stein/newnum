@@ -1,22 +1,27 @@
-pub trait Floating {}
-
 pub trait FloatingEquivalent {
     type Floating: Floating;
 
     fn floating(self) -> Self::Floating;
 }
 
-impl<T: Floating> FloatingEquivalent for T {
-    type Floating = Self;
+pub trait Floating: FloatingEquivalent<Floating = Self> {}
 
-    #[inline(always)]
-    fn floating(self) -> Self::Floating {
-        self
-    }
+impl<T: FloatingEquivalent<Floating = Self>> Floating for T {}
+
+macro_rules! float_impl {
+    ($type:ident) => {
+        impl FloatingEquivalent for $type {
+            type Floating = Self;
+
+            #[inline(always)]
+            fn floating(self) -> Self::Floating {
+                self
+            }
+        }
+    };
 }
-
-impl Floating for f32 {}
-impl Floating for f64 {}
+float_impl!(f32);
+float_impl!(f64);
 
 macro_rules! int_impl {
     ($type:ident => $floating:ident) => {

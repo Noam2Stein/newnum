@@ -1,13 +1,9 @@
-use crate::{Whole, WholeEquivalent};
+use crate::WholeEquivalent;
 
 /// Trait for the round API (round, floor...).
 ///
 /// Doesn't require ```Self``` to be a number because non-number types can benefit from this too.
 /// For example number containers like vectors or matricies.
-///
-/// impl [```Whole```] for types that are always round (for example ```u8```),
-/// which will auto impl ```Round``` because when being generic over a number type,
-/// it makes sense to round a number even if it winds up to be an always round type.
 pub trait Round: Sized {
     fn round(self) -> Self;
     fn floor(self) -> Self;
@@ -19,14 +15,10 @@ pub trait Round: Sized {
 /// Trait for a round-to-int API (iround, ifloor...).
 ///
 /// ```Round``` returns ```Self```,
-/// where ```IRound``` returns ```Self::Output``` which represents the round equivalent of ```Self```.
+/// where ```IRound``` returns ```Self::Whole``` which represents the whole equivalent of ```Self```.
 ///
 /// Doesn't require ```Self``` to be a number because non-number types can benefit from this too.
 /// For example number containers like vectors or matricies.
-///
-/// impl [```Whole```] for types that are always round (for example ```u8```),
-/// which will auto impl ```IRound``` because when being generic over a number type,
-/// it makes sense to round a number even if it winds up to be an always round type.
 pub trait IRound: Sized + WholeEquivalent {
     fn iround(self) -> Self::Whole;
     fn ifloor(self) -> Self::Whole;
@@ -35,51 +27,75 @@ pub trait IRound: Sized + WholeEquivalent {
     fn iatrunc(self) -> Self::Whole;
 }
 
-impl<T: Whole> Round for T {
-    #[inline(always)]
-    fn round(self) -> Self {
-        self
-    }
-    #[inline(always)]
-    fn floor(self) -> Self {
-        self
-    }
-    #[inline(always)]
-    fn ceil(self) -> Self {
-        self
-    }
-    #[inline(always)]
-    fn trunc(self) -> Self {
-        self
-    }
-    #[inline(always)]
-    fn atrunc(self) -> Self {
-        self
-    }
-}
+macro_rules! int_impl {
+    ($type:ident) => {
+        impl Round for $type {
+            #[inline(always)]
+            fn round(self) -> Self {
+                self
+            }
 
-impl<T: Whole> IRound for T {
-    #[inline(always)]
-    fn iround(self) -> Self::Whole {
-        self
-    }
-    #[inline(always)]
-    fn ifloor(self) -> Self::Whole {
-        self
-    }
-    #[inline(always)]
-    fn iceil(self) -> Self::Whole {
-        self
-    }
-    #[inline(always)]
-    fn itrunc(self) -> Self::Whole {
-        self
-    }
-    #[inline(always)]
-    fn iatrunc(self) -> Self::Whole {
-        self
-    }
+            #[inline(always)]
+            fn floor(self) -> Self {
+                self
+            }
+
+            #[inline(always)]
+            fn ceil(self) -> Self {
+                self
+            }
+
+            #[inline(always)]
+            fn trunc(self) -> Self {
+                self
+            }
+
+            #[inline(always)]
+            fn atrunc(self) -> Self {
+                self
+            }
+        }
+
+        impl IRound for $type {
+            #[inline(always)]
+            fn iround(self) -> Self::Whole {
+                self
+            }
+
+            #[inline(always)]
+            fn ifloor(self) -> Self::Whole {
+                self
+            }
+
+            #[inline(always)]
+            fn iceil(self) -> Self::Whole {
+                self
+            }
+
+            #[inline(always)]
+            fn itrunc(self) -> Self::Whole {
+                self
+            }
+
+            #[inline(always)]
+            fn iatrunc(self) -> Self::Whole {
+                self
+            }
+        }
+    };
 }
+int_impl!(u8);
+int_impl!(u16);
+int_impl!(u32);
+int_impl!(u64);
+int_impl!(u128);
+int_impl!(usize);
+int_impl!(i8);
+int_impl!(i16);
+int_impl!(i32);
+int_impl!(i64);
+int_impl!(i128);
+int_impl!(isize);
 
 macro_rules! float_impl {
     ($type:ident) => {

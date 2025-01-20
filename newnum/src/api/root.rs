@@ -1,6 +1,6 @@
 use splat_attribs::splat_attribs;
 
-use crate::{FloatingEquivalent, Int, Positive, Whole, WholeEquivalent};
+use crate::{FloatingEquivalent, Int, Positive, WholeEquivalent};
 
 pub trait Root {
     fn sqrt(self) -> Self;
@@ -13,17 +13,6 @@ pub trait TruncRoot {
 pub trait IRoot: WholeEquivalent {
     fn isqrt(self) -> Self;
     fn icbrt(self) -> Self;
-}
-
-impl<T: Whole + TruncRoot> IRoot for T {
-    #[inline(always)]
-    fn isqrt(self) -> Self {
-        self.trunc_sqrt()
-    }
-    #[inline(always)]
-    fn icbrt(self) -> Self {
-        self.trunc_sqrt()
-    }
 }
 
 macro_rules! float_impl {
@@ -78,6 +67,18 @@ macro_rules! int_cast_impl {
                 (self as <Self as FloatingEquivalent>::Floating).trunc_cbrt() as _
             }
         }
+
+        impl IRoot for $type {
+            #[inline(always)]
+            fn isqrt(self) -> Self {
+                self.trunc_sqrt()
+            }
+
+            #[inline(always)]
+            fn icbrt(self) -> Self {
+                self.trunc_cbrt()
+            }
+        }
     };
 }
 int_cast_impl!(u8);
@@ -112,6 +113,18 @@ macro_rules! int_checked_cast_impl {
                 } else {
                     int_cbrt(self)
                 }
+            }
+        }
+
+        impl IRoot for $type {
+            #[inline(always)]
+            fn isqrt(self) -> Self {
+                self.trunc_sqrt()
+            }
+
+            #[inline(always)]
+            fn icbrt(self) -> Self {
+                self.trunc_cbrt()
             }
         }
     };
