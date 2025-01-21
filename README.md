@@ -1,10 +1,13 @@
-Splits the Rust number API into common traits, with a cleaner design than ```num```.
+Splits the Rust number API and hierarchy into traits, with a cleaner design than ```num```.
 
-The base num trait represents data-types that represent abstract numbers, with the usual +-*/% operators.
-So no measurement units (```Meters```) or operator blocking (```Position```).
+The design of this crate follows these rules:
 
-A ```Num``` can't nessesarely represent any specific value (0, 1, 2...),
-because a number type might, for example, represent only numbers in the range of 100...356.
+* the ```Num``` trait isn't restricted to primitives,
+doesn't require to represent values such as ```0``` or ```1```,
+and is only restricted to representing abstract numbers meaning no measurement units.
 
-Number APIs are each in a different trait and can be also implemented by non numbers.
-For example: a ```Vec2``` can't implement ```Num``` but it can implement ```Round```.
+* the ```Prim``` trait is restricted to primitives,
+but allows non ```std``` types to impl it as long as they follow primitive restrictions.
+
+* API traits (```Round```, ```Root```, ```Trig```...) aren't restricted to ```Num```
+and are designed for non number support, for example ```<Angle as Trig>::Output = Ratio```.

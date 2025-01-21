@@ -10,17 +10,17 @@ pub use range::*;
 /// Trait for types that represent abstract numbers.
 /// Requires ```+-*/%=<>``` opeartors.
 ///
-/// can be implemented by non primitives! for a primitives only trait use [```Pri```].
+/// can be implemented by non primitives! for a primitives only trait use [```Prim```].
 ///
 /// Can't nessesarely represent ```0```, ```1``` or any common value.
 /// For basic positive values add ``` + FromU8```,
 /// for negative values as well add ``` + FromI8```.
 pub trait Num:
     AbsDiff<Output = Self>
+    + MinMax
     + TruncRoot
     + Round
-    + Sign<Bool = bool>
-    + MinMax
+    + Sign<BoolMapped = bool>
     + PartialEq
     + PartialOrd
     + Add<Output = Self>

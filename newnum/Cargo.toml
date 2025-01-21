@@ -5,8 +5,8 @@ edition     = "2021"
 license     = "MIT"
 name        = "newnum"
 readme      = "../README.md"
-repository  = "https://github.com/Noam2Stein/renum"
-version     = "0.0.6"
+repository  = "https://github.com/Noam2Stein/newnum"
+version     = "0.0.7"
 
 [dependencies]
 splat_attribs = "1.0.0"

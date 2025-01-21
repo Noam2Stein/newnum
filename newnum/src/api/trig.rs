@@ -16,7 +16,7 @@ pub trait ATrig {
     fn acot(self) -> Self::Output;
 }
 
-pub trait TrigH {
+pub trait Hyper {
     type Output;
 
     fn sinh(self) -> Self::Output;
@@ -25,7 +25,7 @@ pub trait TrigH {
     fn coth(self) -> Self::Output;
 }
 
-pub trait ATrigH {
+pub trait AHyper {
     type Output;
 
     fn asinh(self) -> Self::Output;
@@ -78,7 +78,7 @@ macro_rules! impl_for_primitive {
             }
         }
 
-        impl TrigH for $type {
+        impl Hyper for $type {
             type Output = Self;
 
             #[inline(always)]
@@ -99,7 +99,7 @@ macro_rules! impl_for_primitive {
             }
         }
 
-        impl ATrigH for $type {
+        impl AHyper for $type {
             type Output = Self;
 
             #[inline(always)]

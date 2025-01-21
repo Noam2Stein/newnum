@@ -1,9 +1,10 @@
-pub trait Sign: Sized {
-    type Bool;
+pub trait Sign {
+    type BoolMapped;
 
-    fn is_positive(&self) -> Self::Bool;
-    fn is_negative(&self) -> Self::Bool;
-    fn is_zero(&self) -> Self::Bool;
+    fn is_positive(&self) -> Self::BoolMapped;
+    fn is_negative(&self) -> Self::BoolMapped;
+    fn is_zero(&self) -> Self::BoolMapped;
+
     fn signum(self) -> Self;
 }
 
@@ -42,20 +43,23 @@ impl<T: Negative + Zero + Positive> FullySigned for T {}
 macro_rules! impl_sign_for_unsigned_ints {
     ($($type:ident)*) => {$(
         impl Sign for $type {
-            type Bool = bool;
+            type BoolMapped = bool;
 
             #[inline(always)]
-            fn is_positive(&self) -> Self::Bool {
+            fn is_positive(&self) -> Self::BoolMapped {
                 *self != 0
             }
+
             #[inline(always)]
-            fn is_negative(&self) -> Self::Bool {
+            fn is_negative(&self) -> Self::BoolMapped {
                 false
             }
+
             #[inline(always)]
-            fn is_zero(&self) -> Self::Bool {
+            fn is_zero(&self) -> Self::BoolMapped {
                 *self == 0
             }
+
             #[inline(always)]
             fn signum(self) -> Self {
                 (self != 0) as $type
@@ -81,20 +85,23 @@ impl_sign_for_unsigned_ints!(u8 u16 u32 u64 u128 usize);
 macro_rules! impl_sign_for_signed_ints {
     ($($type:ident)*) => {$(
         impl Sign for $type {
-            type Bool = bool;
+            type BoolMapped = bool;
 
             #[inline(always)]
-            fn is_positive(&self) -> Self::Bool {
+            fn is_positive(&self) -> Self::BoolMapped {
                 *self > 0
             }
+
             #[inline(always)]
-            fn is_negative(&self) -> Self::Bool {
+            fn is_negative(&self) -> Self::BoolMapped {
                 *self < 0
             }
+
             #[inline(always)]
-            fn is_zero(&self) -> Self::Bool {
+            fn is_zero(&self) -> Self::BoolMapped {
                 *self == 0
             }
+
             #[inline(always)]
             fn signum(self) -> Self {
                 self.signum()
@@ -126,20 +133,23 @@ macro_rules! impl_sign_for_floats {
     ($($type:ident)*) => {
         $(
             impl Sign for $type {
-                type Bool = bool;
+                type BoolMapped = bool;
 
                 #[inline(always)]
-                fn is_positive(&self) -> Self::Bool {
+                fn is_positive(&self) -> Self::BoolMapped {
                     self.is_sign_positive() && *self != 0.0
                 }
+
                 #[inline(always)]
-                fn is_negative(&self) -> Self::Bool {
+                fn is_negative(&self) -> Self::BoolMapped {
                     self.is_sign_negative() && *self != 0.0
                 }
+
                 #[inline(always)]
-                fn is_zero(&self) -> Self::Bool {
+                fn is_zero(&self) -> Self::BoolMapped {
                     *self == 0.0
                 }
+
                 #[inline(always)]
                 fn signum(self) -> Self {
                     if self == 0.0 {

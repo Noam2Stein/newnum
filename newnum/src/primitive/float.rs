@@ -1,4 +1,4 @@
-use crate::{ATrig, ATrigH, Root, Trig, TrigH};
+use crate::{AHyper, ATrig, Hyper, Root, Trig};
 
 use super::SignedPrim;
 
@@ -7,8 +7,8 @@ pub trait Float:
     + Root
     + Trig<Output = Self>
     + ATrig<Output = Self>
-    + TrigH<Output = Self>
-    + ATrigH<Output = Self>
+    + Hyper<Output = Self>
+    + AHyper<Output = Self>
 {
 }
 
