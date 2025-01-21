@@ -1,14 +1,39 @@
 use crate::WholeEquivalent;
 
-/// Trait for the round API (round, floor...).
+/// Trait for the round API (`round`, `floor`...) which may be used for numbers, number containers, or anything that makes sense.
 ///
-/// Doesn't require ```Self``` to be a number because non-number types can benefit from this too.
-/// For example number containers like vectors or matricies.
+/// Functions in this trait return `Self` so this isn't round-to-int,
+/// for that use [`IRound`].
+///
+/// Can also and should also be implemented for types that only represent round numbers (int types).
+/// This is because if you have a `value: impl Num`,
+/// it makes sense to round it even if it may be an int meaning already round.
 pub trait Round: Sized {
+    /// Rounds to the closer whole number.
+    ///
+    /// For example: `1.2 => 1.0`, `1.8 => 2.0`, `-1.3 => -1.0`.
     fn round(self) -> Self;
+
+    /// Rounds down.
+    ///
+    /// For example: `1.2 => 1.0`, `1.8 => 1.0`, `-1.3 => -2.0`.
     fn floor(self) -> Self;
+
+    /// Rounds up.
+    ///
+    /// For example: `1.2 => 2.0`, `1.8 => 2.0`, `-1.3 => -1.0`.
     fn ceil(self) -> Self;
+
+    /// If positive rounds down, else rounds up.
+    ///
+    /// Effectively removes the fractional part of the number by rounding towards zero.
+    /// For example: `1.2 => 1.0`, `1.8 => 1.0`, `-1.3 => -1.0`.
     fn trunc(self) -> Self;
+
+    /// If positive rounds up, else rounds down.
+    ///
+    /// Effectively rounds away from zero.
+    /// For example: `1.2 => 2.0`, `1.8 => 2.0`, `-1.3 => -2.0`.
     fn atrunc(self) -> Self;
 }
 
