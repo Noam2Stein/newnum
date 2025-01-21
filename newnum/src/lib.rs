@@ -20,6 +20,7 @@ pub trait Num:
     + TruncRoot
     + Round
     + Sign<Bool = bool>
+    + MinMax
     + PartialEq
     + PartialOrd
     + Add<Output = Self>

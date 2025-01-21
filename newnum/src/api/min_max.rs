@@ -12,22 +12,40 @@ pub trait MinMax: Sized {
     }
 }
 
-impl<T: PartialOrd> MinMax for T {
-    #[inline(always)]
-    fn min(self, other: Self) -> Self {
-        if self < other {
-            self
-        } else {
-            other
-        }
-    }
+macro_rules! prim_impl {
+    ($type:ident) => {
+        impl MinMax for $type {
+            #[inline(always)]
+            fn min(self, other: Self) -> Self {
+                if self < other {
+                    self
+                } else {
+                    other
+                }
+            }
 
-    #[inline(always)]
-    fn max(self, other: Self) -> Self {
-        if self > other {
-            self
-        } else {
-            other
+            #[inline(always)]
+            fn max(self, other: Self) -> Self {
+                if self > other {
+                    self
+                } else {
+                    other
+                }
+            }
         }
-    }
+    };
 }
+prim_impl!(u8);
+prim_impl!(u16);
+prim_impl!(u32);
+prim_impl!(u64);
+prim_impl!(u128);
+prim_impl!(usize);
+prim_impl!(i8);
+prim_impl!(i16);
+prim_impl!(i32);
+prim_impl!(i64);
+prim_impl!(i128);
+prim_impl!(isize);
+prim_impl!(f32);
+prim_impl!(f64);
