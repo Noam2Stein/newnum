@@ -1,6 +1,6 @@
 use std::fmt::{Debug, Display};
 
-use crate::{FromU7, IRoot, IRound, Num, TruncRoot, WholeEquivalent};
+use crate::{FromU7, IRoot, IRound, Normalizable, Num, TruncRoot, WholeEquivalent};
 
 mod float;
 mod int;
@@ -24,6 +24,7 @@ pub use unsigned::*;
 /// * Can be failibly converted to any std primitive
 pub trait Prim:
     Num
+    + Normalizable
     + AsPrim
     + WholeEquivalent
     + FromU7

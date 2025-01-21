@@ -29,17 +29,6 @@ pub trait Sign {
 
     fn is_zero(&self) -> Self::BoolMapped;
 
-    /// Returns either ```1```, ```-1``` or ```0``` based on the number's sign:
-    /// * ```self > 0 => 1```,
-    /// * ```self < 0 => -1```,
-    /// * ```self == 0 => 0```.
-    ///
-    /// This means that even for floats who store a sign thats either positive or negative even when the number is equal to zero,
-    /// this function returns zero for ```self == 0```.
-    ///
-    /// For a signum that is either ```1``` or ```-1``` use ```signumf```.
-    fn signum(self) -> Self;
-
     /// Returns ```true``` if ```self```'s sign is positive.
     ///
     /// If ```self``` is equal to zero:
@@ -53,15 +42,6 @@ pub trait Sign {
     /// * If ```Self``` stores the number's sign even in a zero state (```+0``` / ```-0```) the sign is used.
     /// * If ```Self``` doesn't store the number's sign in a zero state, the number is considered positive.
     fn is_sign_negative(&self) -> Self::BoolMapped;
-
-    /// Returns either ```1``` or ```-1``` based on the number's sign:
-    /// * positive ```=> 1```,
-    /// * negative ```=> -1```.
-    ///
-    /// If ```self``` is equal to zero:
-    /// * If ```Self``` stores the number's sign even in a zero state (```+0``` / ```-0```) the sign is used.
-    /// * If ```Self``` doesn't store the number's sign in a zero state, the number is considered positive.
-    fn signumf(self) -> Self;
 }
 
 /// Trait for types that can represent positive values (maybe a number or a number container).
@@ -166,8 +146,8 @@ impl<T: Negative + Zero + NotPositive> NegativeOrZero for T {}
 impl<T: Negative + NotZero + Positive> PositiveOrNegative for T {}
 impl<T: Negative + Zero + Positive> FullySigned for T {}
 
-macro_rules! impl_sign_for_unsigned_ints {
-    ($($type:ident)*) => {$(
+macro_rules! uint_impl {
+    ($type:ident) => {
         impl Sign for $type {
             type BoolMapped = bool;
 
@@ -185,12 +165,6 @@ macro_rules! impl_sign_for_unsigned_ints {
             fn is_zero(&self) -> Self::BoolMapped {
                 *self == 0
             }
-
-            #[inline(always)]
-            fn signum(self) -> Self {
-                (self != 0) as $type
-            }
-
             #[inline(always)]
             fn is_sign_positive(&self) -> Self::BoolMapped {
                 true
@@ -199,11 +173,6 @@ macro_rules! impl_sign_for_unsigned_ints {
             #[inline(always)]
             fn is_sign_negative(&self) -> Self::BoolMapped {
                 false
-            }
-
-            #[inline(always)]
-            fn signumf(self) -> Self {
-                1
             }
         }
         impl Zero for $type {
@@ -219,12 +188,17 @@ macro_rules! impl_sign_for_unsigned_ints {
             }
         }
         impl NotNegative for $type {}
-    )*};
+    };
 }
-impl_sign_for_unsigned_ints!(u8 u16 u32 u64 u128 usize);
+uint_impl!(u8);
+uint_impl!(u16);
+uint_impl!(u32);
+uint_impl!(u64);
+uint_impl!(u128);
+uint_impl!(usize);
 
-macro_rules! impl_sign_for_signed_ints {
-    ($($type:ident)*) => {$(
+macro_rules! sint_impl {
+    ($type:ident) => {
         impl Sign for $type {
             type BoolMapped = bool;
 
@@ -244,11 +218,6 @@ macro_rules! impl_sign_for_signed_ints {
             }
 
             #[inline(always)]
-            fn signum(self) -> Self {
-                self.signum()
-            }
-
-            #[inline(always)]
             fn is_sign_positive(&self) -> Self::BoolMapped {
                 *self >= 0
             }
@@ -256,15 +225,6 @@ macro_rules! impl_sign_for_signed_ints {
             #[inline(always)]
             fn is_sign_negative(&self) -> Self::BoolMapped {
                 *self < 0
-            }
-
-            #[inline(always)]
-            fn signumf(self) -> Self {
-                if self.is_sign_positive() {
-                    1
-                } else {
-                    -1
-                }
             }
         }
         impl Zero for $type {
@@ -285,74 +245,64 @@ macro_rules! impl_sign_for_signed_ints {
                 -self.abs()
             }
         }
-    )*};
-}
-impl_sign_for_signed_ints!(i8 i16 i32 i64 i128 isize);
-
-macro_rules! impl_sign_for_floats {
-    ($($type:ident)*) => {
-        $(
-            impl Sign for $type {
-                type BoolMapped = bool;
-
-                #[inline(always)]
-                fn is_positive(&self) -> Self::BoolMapped {
-                    self.is_sign_positive() && *self != 0.0
-                }
-
-                #[inline(always)]
-                fn is_negative(&self) -> Self::BoolMapped {
-                    self.is_sign_negative() && *self != 0.0
-                }
-
-                #[inline(always)]
-                fn is_zero(&self) -> Self::BoolMapped {
-                    *self == 0.0
-                }
-
-                #[inline(always)]
-                fn signum(self) -> Self {
-                    if self == 0.0 {
-                        0.0
-                    } else {
-                        self.signum()
-                    }
-                }
-
-                #[inline(always)]
-                fn is_sign_positive(&self) -> Self::BoolMapped {
-                    $type::is_sign_positive(*self)
-                }
-
-                #[inline(always)]
-                fn is_sign_negative(&self) -> Self::BoolMapped {
-                    $type::is_sign_negative(*self)
-                }
-
-                #[inline(always)]
-                fn signumf(self) -> Self {
-                    $type::signum(self)
-                }
-            }
-            impl Zero for $type {
-                #[inline(always)]
-                fn zero() -> Self {
-                    0.0
-                }
-            }
-            impl Positive for $type {
-                #[inline(always)]
-                fn abs(self) -> Self {
-                    self.abs()
-                }
-            }
-            impl Negative for $type {
-                #[inline(always)]
-                fn neg_abs(self) -> Self {
-                    -self.abs()
-                }
-            }
-        )*
     };
 }
-impl_sign_for_floats!(f32 f64);
+sint_impl!(i8);
+sint_impl!(i16);
+sint_impl!(i32);
+sint_impl!(i64);
+sint_impl!(i128);
+sint_impl!(isize);
+
+macro_rules! float_impl {
+    ($type:ident) => {
+        impl Sign for $type {
+            type BoolMapped = bool;
+
+            #[inline(always)]
+            fn is_positive(&self) -> Self::BoolMapped {
+                self.is_sign_positive() && *self != 0.0
+            }
+
+            #[inline(always)]
+            fn is_negative(&self) -> Self::BoolMapped {
+                self.is_sign_negative() && *self != 0.0
+            }
+
+            #[inline(always)]
+            fn is_zero(&self) -> Self::BoolMapped {
+                *self == 0.0
+            }
+
+            #[inline(always)]
+            fn is_sign_positive(&self) -> Self::BoolMapped {
+                $type::is_sign_positive(*self)
+            }
+
+            #[inline(always)]
+            fn is_sign_negative(&self) -> Self::BoolMapped {
+                $type::is_sign_negative(*self)
+            }
+        }
+        impl Zero for $type {
+            #[inline(always)]
+            fn zero() -> Self {
+                0.0
+            }
+        }
+        impl Positive for $type {
+            #[inline(always)]
+            fn abs(self) -> Self {
+                self.abs()
+            }
+        }
+        impl Negative for $type {
+            #[inline(always)]
+            fn neg_abs(self) -> Self {
+                -self.abs()
+            }
+        }
+    };
+}
+float_impl!(f32);
+float_impl!(f64);
