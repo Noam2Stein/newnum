@@ -1,5 +1,4 @@
 /// trait for ```min```, ```max``` fns.
-/// Is auto implemented for any type that implements ```PartialOrd```.
 ///
 /// Can be implemented by non ```PartialOrd``` number-containers types,
 /// by returning the min/max of each element.
