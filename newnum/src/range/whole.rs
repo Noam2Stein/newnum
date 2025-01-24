@@ -5,6 +5,8 @@ pub trait Whole: WholeEquivalent<Whole = Self> + Round + IRound {}
 
 impl<T: WholeEquivalent<Whole = Self> + Round + IRound> Whole for T {}
 
+/// Trait for numbers/number-containers that have whole/integer equivilants.
+/// The `Whole` type should be the lightest whole type that can represent the entire range of `Self`.
 pub trait WholeEquivalent {
     type Whole: Whole;
 
