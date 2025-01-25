@@ -7,6 +7,8 @@ pub use api::*;
 pub use primitive::*;
 pub use range::*;
 
+pub mod derive;
+
 /// Trait for types that represent abstract numbers.
 /// Requires ```+-*/%=<>``` opeartors.
 ///

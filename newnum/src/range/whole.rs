@@ -9,19 +9,12 @@ impl<T: WholeEquivalent<Whole = Self> + Round + IRound> Whole for T {}
 /// The `Whole` type should be the lightest whole type that can represent the entire range of `Self`.
 pub trait WholeEquivalent {
     type Whole: Whole;
-
-    fn whole(self) -> Self::Whole;
 }
 
 macro_rules! int_impl {
     ($type:ident) => {
         impl WholeEquivalent for $type {
             type Whole = Self;
-
-            #[inline(always)]
-            fn whole(self) -> Self::Whole {
-                self
-            }
         }
     };
 }
@@ -42,11 +35,6 @@ macro_rules! float_impl {
     ($type:ident => $whole:ident) => {
         impl WholeEquivalent for $type {
             type Whole = $whole;
-
-            #[inline(always)]
-            fn whole(self) -> Self::Whole {
-                self as _
-            }
         }
     };
 }
