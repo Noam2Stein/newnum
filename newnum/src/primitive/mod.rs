@@ -28,8 +28,10 @@ pub trait Prim:
     + AsPrim
     + WholeEquivalent
     + FromU7
-    + TruncRoot
-    + IRoot
+    + TruncRoot<2>
+    + TruncRoot<3>
+    + IRoot<2>
+    + IRoot<3>
     + IRound
     + Send
     + Sync

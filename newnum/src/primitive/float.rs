@@ -4,7 +4,8 @@ use super::SignedPrim;
 
 pub trait Float:
     SignedPrim
-    + Root
+    + Root<2>
+    + Root<3>
     + Trig<Output = Self>
     + ATrig<Output = Self>
     + Hyper<Output = Self>

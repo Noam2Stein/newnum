@@ -1,52 +1,118 @@
 use splat_attribs::splat_attribs;
 
-use crate::{FloatingEquivalent, Int, Positive, WholeEquivalent};
+use crate::{FloatingEquivalent, Int, Num, Positive, WholeEquivalent};
 
-pub trait Root {
-    fn sqrt(self) -> Self;
-    fn cbrt(self) -> Self;
+mod ext {
+    use super::*;
+
+    pub trait SqrtExt: Root<2> {
+        fn sqrt(self) -> Self::Root;
+    }
+    pub trait CbrtExt: Root<3> {
+        fn cbrt(self) -> Self::Root;
+    }
+    pub trait TruncSqrtExt: TruncRoot<2> {
+        fn trunc_sqrt(self) -> Self::Root;
+    }
+    pub trait TruncCbrtExt: TruncRoot<3> {
+        fn trunc_cbrt(self) -> Self::Root;
+    }
+    pub trait ISqrtExt: IRoot<2> {
+        fn isqrt(self) -> <Self::Root as WholeEquivalent>::Whole;
+    }
+    pub trait ICbrtExt: IRoot<3> {
+        fn icbrt(self) -> <Self::Root as WholeEquivalent>::Whole;
+    }
+
+    impl<T: Root<2>> SqrtExt for T {
+        fn sqrt(self) -> Self::Root {
+            self.root()
+        }
+    }
+    impl<T: Root<3>> CbrtExt for T {
+        fn cbrt(self) -> Self::Root {
+            self.root()
+        }
+    }
+    impl<T: TruncRoot<2>> TruncSqrtExt for T {
+        fn trunc_sqrt(self) -> Self::Root {
+            self.trunc_root()
+        }
+    }
+    impl<T: TruncRoot<3>> TruncCbrtExt for T {
+        fn trunc_cbrt(self) -> Self::Root {
+            self.trunc_root()
+        }
+    }
+    impl<T: IRoot<2>> ISqrtExt for T {
+        fn isqrt(self) -> <Self::Root as WholeEquivalent>::Whole {
+            self.iroot()
+        }
+    }
+    impl<T: IRoot<3>> ICbrtExt for T {
+        fn icbrt(self) -> <Self::Root as WholeEquivalent>::Whole {
+            self.iroot()
+        }
+    }
 }
-pub trait TruncRoot {
-    fn trunc_sqrt(self) -> Self;
-    fn trunc_cbrt(self) -> Self;
+pub use ext::*;
+
+pub trait RootEquivalent<const P: usize> {
+    type Root;
 }
-pub trait IRoot: WholeEquivalent {
-    fn isqrt(self) -> Self;
-    fn icbrt(self) -> Self;
+
+pub trait Root<const P: usize>: RootEquivalent<P> {
+    fn root(self) -> Self::Root;
+}
+pub trait TruncRoot<const P: usize>: RootEquivalent<P> {
+    fn trunc_root(self) -> Self::Root;
+}
+pub trait IRoot<const P: usize>: RootEquivalent<P, Root: WholeEquivalent> {
+    fn iroot(self) -> <Self::Root as WholeEquivalent>::Whole;
+}
+
+impl<T: Num, const P: usize> RootEquivalent<P> for T {
+    type Root = T;
 }
 
 macro_rules! float_impl {
     ($type:ident) => {
-        impl Root for $type {
+        impl Root<2> for $type {
             #[inline(always)]
-            fn sqrt(self) -> Self {
+            fn root(self) -> Self::Root {
                 self.sqrt()
             }
+        }
+        impl Root<3> for $type {
             #[inline(always)]
-            fn cbrt(self) -> Self {
+            fn root(self) -> Self::Root {
                 self.cbrt()
             }
         }
 
-        impl TruncRoot for $type {
+        impl TruncRoot<2> for $type {
             #[inline(always)]
-            fn trunc_sqrt(self) -> Self {
+            fn trunc_root(self) -> Self {
                 self.sqrt().trunc()
             }
+        }
+        impl TruncRoot<3> for $type {
             #[inline(always)]
-            fn trunc_cbrt(self) -> Self {
+            fn trunc_root(self) -> Self {
                 self.cbrt().trunc()
             }
         }
 
-        impl IRoot for $type {
+        impl IRoot<2> for $type {
             #[inline(always)]
-            fn isqrt(self) -> Self {
-                self.trunc_sqrt() as _
+            fn iroot(self) -> <Self::Root as WholeEquivalent>::Whole {
+                TruncRoot::<2>::trunc_root(self) as _
             }
+        }
+        impl IRoot<3> for $type {
             #[inline(always)]
-            fn icbrt(self) -> Self {
-                self.trunc_cbrt() as _
+            fn iroot(self) -> <Self::Root as WholeEquivalent>::Whole {
+                TruncRoot::<3>::trunc_root(self) as _
             }
         }
     };
@@ -56,27 +122,29 @@ float_impl!(f64);
 
 macro_rules! int_cast_impl {
     ($type:ident) => {
-        impl TruncRoot for $type {
+        impl TruncRoot<2> for $type {
             #[inline(always)]
-            fn trunc_sqrt(self) -> Self {
-                (self as <Self as FloatingEquivalent>::Floating).trunc_sqrt() as _
+            fn trunc_root(self) -> Self {
+                TruncRoot::<2>::trunc_root(self as <Self as FloatingEquivalent>::Floating) as _
             }
-
+        }
+        impl TruncRoot<3> for $type {
             #[inline(always)]
-            fn trunc_cbrt(self) -> Self {
-                (self as <Self as FloatingEquivalent>::Floating).trunc_cbrt() as _
+            fn trunc_root(self) -> Self {
+                TruncRoot::<3>::trunc_root(self as <Self as FloatingEquivalent>::Floating) as _
             }
         }
 
-        impl IRoot for $type {
+        impl IRoot<2> for $type {
             #[inline(always)]
-            fn isqrt(self) -> Self {
-                self.trunc_sqrt()
+            fn iroot(self) -> Self {
+                TruncRoot::<2>::trunc_root(self)
             }
-
+        }
+        impl IRoot<3> for $type {
             #[inline(always)]
-            fn icbrt(self) -> Self {
-                self.trunc_cbrt()
+            fn iroot(self) -> Self {
+                TruncRoot::<3>::trunc_root(self)
             }
         }
     };
@@ -96,35 +164,37 @@ splat_attribs! {
 
 macro_rules! int_checked_cast_impl {
     ($type:ident) => {
-        impl TruncRoot for $type {
+        impl TruncRoot<2> for $type {
             #[inline(always)]
-            fn trunc_sqrt(self) -> Self {
+            fn trunc_root(self) -> Self {
                 if self.abs() < 2 ^ 52 {
-                    (self as f64).trunc_sqrt() as _
+                    TruncRoot::<2>::trunc_root(self as f64) as _
                 } else {
                     int_sqrt(self)
                 }
             }
-
+        }
+        impl TruncRoot<3> for $type {
             #[inline(always)]
-            fn trunc_cbrt(self) -> Self {
+            fn trunc_root(self) -> Self {
                 if self.abs() < 2 ^ 52 {
-                    (self as f64).trunc_cbrt() as _
+                    TruncRoot::<3>::trunc_root(self as f64) as _
                 } else {
                     int_cbrt(self)
                 }
             }
         }
 
-        impl IRoot for $type {
+        impl IRoot<2> for $type {
             #[inline(always)]
-            fn isqrt(self) -> Self {
-                self.trunc_sqrt()
+            fn iroot(self) -> Self {
+                TruncRoot::<2>::trunc_root(self)
             }
-
+        }
+        impl IRoot<3> for $type {
             #[inline(always)]
-            fn icbrt(self) -> Self {
-                self.trunc_cbrt()
+            fn iroot(self) -> Self {
+                TruncRoot::<3>::trunc_root(self)
             }
         }
     };

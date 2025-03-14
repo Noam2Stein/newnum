@@ -20,7 +20,8 @@ pub mod derive;
 pub trait Num:
     AbsDiff<Output = Self>
     + MinMax
-    + TruncRoot
+    + TruncRoot<2>
+    + TruncRoot<3>
     + Round
     + Sign<BoolMapped = bool>
     + PartialEq
