@@ -1,5 +1,110 @@
+use proc_macro2::TokenStream;
 use quote::quote;
-use syn::{parse_macro_input, spanned::Spanned, Data, DeriveInput, Fields, Lit, LitInt};
+use syn::{parse_macro_input, spanned::Spanned, Data, DeriveInput, Fields, Ident, Lit, LitInt};
+
+#[proc_macro_derive(Num)]
+pub fn derive_num(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    let input = parse_macro_input!(input as DeriveInput);
+
+    let ident = input.ident;
+    let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
+
+    quote! {
+        impl #impl_generics newnum::Num for #ident #ty_generics where #where_clause {}
+    }
+    .into()
+}
+
+#[proc_macro_derive(Prim)]
+pub fn derive_prim(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    let input = parse_macro_input!(input as DeriveInput);
+
+    let ident = input.ident;
+    let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
+
+    quote! {
+        impl #impl_generics newnum::Prim for #ident #ty_generics where #where_clause {}
+    }
+    .into()
+}
+
+#[proc_macro_derive(SignedPrim)]
+pub fn derive_signed_prim(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    let input = parse_macro_input!(input as DeriveInput);
+
+    let ident = input.ident;
+    let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
+
+    quote! {
+        impl #impl_generics newnum::SignedPrim for #ident #ty_generics where #where_clause {}
+    }
+    .into()
+}
+
+#[proc_macro_derive(UnsignedPrim)]
+pub fn derive_unsigned_prim(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    let input = parse_macro_input!(input as DeriveInput);
+
+    let ident = input.ident;
+    let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
+
+    quote! {
+        impl #impl_generics newnum::UnsignedPrim for #ident #ty_generics where #where_clause {}
+    }
+    .into()
+}
+
+#[proc_macro_derive(Int)]
+pub fn derive_int(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    let input = parse_macro_input!(input as DeriveInput);
+
+    let ident = input.ident;
+    let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
+
+    quote! {
+        impl #impl_generics newnum::Int for #ident #ty_generics where #where_clause {}
+    }
+    .into()
+}
+
+#[proc_macro_derive(UInt)]
+pub fn derive_uint(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    let input = parse_macro_input!(input as DeriveInput);
+
+    let ident = input.ident;
+    let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
+
+    quote! {
+        impl #impl_generics newnum::UInt for #ident #ty_generics where #where_clause {}
+    }
+    .into()
+}
+
+#[proc_macro_derive(SInt)]
+pub fn derive_sint(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    let input = parse_macro_input!(input as DeriveInput);
+
+    let ident = input.ident;
+    let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
+
+    quote! {
+        impl #impl_generics newnum::SInt for #ident #ty_generics where #where_clause {}
+    }
+    .into()
+}
+
+#[proc_macro_derive(Float)]
+pub fn derive_float(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    let input = parse_macro_input!(input as DeriveInput);
+
+    let ident = input.ident;
+    let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
+
+    quote! {
+        impl #impl_generics newnum::Float for #ident #ty_generics where #where_clause {}
+    }
+    .into()
+}
 
 #[proc_macro_derive(Whole)]
 pub fn derive_whole(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
@@ -261,4 +366,79 @@ pub fn derive_round(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
         }
     }
     .into()
+}
+
+fn impl_empty_trait(input: &DeriveInput, trait_ident: &str) -> TokenStream {
+    let ident = &input.ident;
+    let trait_ident = Ident::new(trait_ident, input.span());
+    let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
+
+    quote! {
+        impl #impl_generics newnum::#trait_ident for #ident #ty_generics where #where_clause {}
+    }
+}
+
+fn impl_whole(input: &DeriveInput) -> TokenStream {
+    let ident = &input.ident;
+    let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
+
+    quote! {
+        impl #impl_generics newnum::WholeEquivalent for #ident #ty_generics where #where_clause {
+            type Whole = Self;
+        }
+
+        impl #impl_generics newnum::Round for #ident #ty_generics where #where_clause {
+            #[inline(always)]
+            fn round(self) -> Self {
+                self
+            }
+
+            #[inline(always)]
+            fn floor(self) -> Self {
+                self
+            }
+
+            #[inline(always)]
+            fn ceil(self) -> Self {
+                self
+            }
+
+            #[inline(always)]
+            fn trunc(self) -> Self {
+                self
+            }
+
+            #[inline(always)]
+            fn atrunc(self) -> Self {
+                self
+            }
+        }
+
+        impl #impl_generics newnum::IRound for #ident #ty_generics where #where_clause {
+            #[inline(always)]
+            fn iround(self) -> Self::Whole {
+                self
+            }
+
+            #[inline(always)]
+            fn ifloor(self) -> Self::Whole {
+                self
+            }
+
+            #[inline(always)]
+            fn iceil(self) -> Self::Whole {
+                self
+            }
+
+            #[inline(always)]
+            fn itrunc(self) -> Self::Whole {
+                self
+            }
+
+            #[inline(always)]
+            fn iatrunc(self) -> Self::Whole {
+                self
+            }
+        }
+    }
 }
