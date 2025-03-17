@@ -1,10 +1,11 @@
 use newnum::*;
 
 fn main() {
-    println!("{}", guf(0, -2))
-    
+    let mut i = 5.0;
+    mul_by_two(&mut i);
+    println!("{i}")
 }
 
-fn guf<T: Prim>(a: T, b: T) -> T {
-    a.signumf() * b.signumf()
+fn mul_by_two(value: &mut impl Num) {
+    *value *= float!(1.5)
 }

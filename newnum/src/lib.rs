@@ -9,6 +9,8 @@ pub use range::*;
 
 pub mod derive;
 
+pub use newnum_proc_macros::{float, int};
+
 /// Trait for types that represent abstract numbers.
 /// Requires ```+-*/%=<>``` opeartors.
 ///
@@ -20,8 +22,8 @@ pub mod derive;
 pub trait Num:
     AbsDiff<Output = Self>
     + MinMax
-    + TruncRoot<2>
-    + TruncRoot<3>
+    + TruncRoot<2, Root = Self>
+    + TruncRoot<3, Root = Self>
     + Round
     + Sign<BoolMapped = bool>
     + PartialEq
@@ -37,19 +39,58 @@ pub trait Num:
     + DivAssign
     + RemAssign
 {
+    const MIN_CONSTANT: Option<i128>;
+    const MAX_CONSTANT: Option<i128>;
+    const ALLOW_FLOAT_CONSTANTS: bool;
+
+    unsafe fn int_constant(value: i128) -> Self;
+    unsafe fn float_constant(value: f64) -> Self;
 }
 
-impl Num for u8 {}
-impl Num for u16 {}
-impl Num for u32 {}
-impl Num for u64 {}
-impl Num for u128 {}
-impl Num for usize {}
-impl Num for i8 {}
-impl Num for i16 {}
-impl Num for i32 {}
-impl Num for i64 {}
-impl Num for i128 {}
-impl Num for isize {}
-impl Num for f32 {}
-impl Num for f64 {}
+macro_rules! int_impl {
+    ($ty:ty) => {
+        impl Num for $ty {
+            const MIN_CONSTANT: Option<i128> = Some(Self::MIN as _);
+            const MAX_CONSTANT: Option<i128> = Some(Self::MAX as _);
+            const ALLOW_FLOAT_CONSTANTS: bool = false;
+
+            unsafe fn int_constant(value: i128) -> Self {
+                value as Self
+            }
+            unsafe fn float_constant(_value: f64) -> Self {
+                unreachable!()
+            }
+        }
+    };
+}
+int_impl!(u8);
+int_impl!(u16);
+int_impl!(u32);
+int_impl!(u64);
+int_impl!(u128);
+int_impl!(usize);
+int_impl!(i8);
+int_impl!(i16);
+int_impl!(i32);
+int_impl!(i64);
+int_impl!(i128);
+int_impl!(isize);
+
+macro_rules! float_impl {
+    ($ty:ty) => {
+        impl Num for $ty {
+            const MIN_CONSTANT: Option<i128> = Some(Self::MIN as _);
+            const MAX_CONSTANT: Option<i128> = Some(Self::MAX as _);
+            const ALLOW_FLOAT_CONSTANTS: bool = true;
+
+            unsafe fn int_constant(value: i128) -> Self {
+                value as Self
+            }
+            unsafe fn float_constant(value: f64) -> Self {
+                value as Self
+            }
+        }
+    };
+}
+float_impl!(f32);
+float_impl!(f64);

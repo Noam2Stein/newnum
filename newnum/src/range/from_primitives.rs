@@ -1,6 +1,6 @@
 use crate::{Floating, Num, Positive, Zero};
 
-use super::{FullySigned, Normalizable};
+use super::{FullySigned, Signum};
 
 macro_rules! from_trait {
     ($(#[$meta:meta])* $trait:ident($fn:ident $type:ident) $(: $first_supertrait:ident $( + $supertrait:ident)*)? { impl for $($impl_type:ident)* }) => {
@@ -25,7 +25,7 @@ from_trait!(
 );
 from_trait!(
     /// Trait for number types that can represent both `1`, `-1` and `0`.
-    FromI2(i2 i8): FullySigned + Normalizable { impl for i8 i16 i32 i64 i128 isize f32 f64 }
+    FromI2(i2 i8): FullySigned + Signum { impl for i8 i16 i32 i64 i128 isize f32 f64 }
 );
 
 from_trait!(

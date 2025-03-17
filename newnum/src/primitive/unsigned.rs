@@ -1,8 +1,8 @@
-use crate::{FromU8, NotNegative};
+use crate::{FromU8, MinValue, NotNegative};
 
 use super::Prim;
 
-pub trait UnsignedPrim: Prim + NotNegative + FromU8 {}
+pub trait UnsignedPrim: Prim + NotNegative + FromU8 + MinValue {}
 
 impl UnsignedPrim for u8 {}
 impl UnsignedPrim for u16 {}

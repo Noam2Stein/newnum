@@ -1,10 +1,10 @@
 mod floating;
 mod from_primitives;
-mod normalizable;
+mod min_max_values;
 mod sign;
 mod whole;
 pub use floating::*;
 pub use from_primitives::*;
-pub use normalizable::*;
+pub use min_max_values::*;
 pub use sign::*;
 pub use whole::*;
