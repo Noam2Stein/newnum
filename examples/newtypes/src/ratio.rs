@@ -3,17 +3,13 @@ use std::fmt::Display;
 use derive_more::derive::{
     Add, AddAssign, Div, DivAssign, Mul, MulAssign, Rem, RemAssign, Sub, SubAssign,
 };
-use newnum::{
-    derive::{Floating, Round},
-    ATrig, WholeEquivalent,
-};
+use newnum::{ATrig, IRound, WholeEquivalent};
 
 use crate::{angle::Angle, whole_ratio::WholeRatio};
 
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
 #[derive(Add, Sub, Mul, Div, Rem)]
 #[derive(AddAssign, SubAssign, MulAssign, DivAssign, RemAssign)]
-#[derive(Floating, Round)]
 pub struct Ratio(pub f64);
 
 impl Display for Ratio {
@@ -26,6 +22,24 @@ impl Display for Ratio {
 
 impl WholeEquivalent for Ratio {
     type Whole = WholeRatio;
+}
+
+impl IRound for Ratio {
+    fn iround(self) -> Self::Whole {
+        WholeRatio(self.0.iround())
+    }
+    fn ifloor(self) -> Self::Whole {
+        WholeRatio(self.0.ifloor())
+    }
+    fn iceil(self) -> Self::Whole {
+        WholeRatio(self.0.iceil())
+    }
+    fn itrunc(self) -> Self::Whole {
+        WholeRatio(self.0.itrunc())
+    }
+    fn iatrunc(self) -> Self::Whole {
+        WholeRatio(self.0.iatrunc())
+    }
 }
 
 impl ATrig for Ratio {

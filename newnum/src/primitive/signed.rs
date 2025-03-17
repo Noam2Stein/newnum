@@ -1,10 +1,10 @@
 use std::ops::Neg;
 
-use crate::{FromI8, Negative};
+use crate::Negative;
 
 use super::Prim;
 
-pub trait SignedPrim: Prim + Negative + Neg<Output = Self> + FromI8 {}
+pub trait SignedPrim: Prim + Negative + Neg<Output = Self> {}
 
 impl SignedPrim for i8 {}
 impl SignedPrim for i16 {}

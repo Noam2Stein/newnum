@@ -1,3 +1,4 @@
+use newnum_proc_macros::crate_int;
 use splat_attribs::splat_attribs;
 
 use crate::{FloatingEquivalent, Int, Num, Positive, WholeEquivalent};
@@ -216,19 +217,19 @@ fn int_sqrt<T: Int>(value: T) -> T {
     } else if value.is_zero() {
         value
     } else {
-        let mut low = T::u7(1);
+        let mut low = crate_int!(1);
         let mut high = value;
 
         while low <= high {
-            let mid = (low + high) / T::u7(2);
+            let mid = (low + high) / crate_int!(2);
             let square = mid * mid;
 
             if square == value {
                 return mid;
             } else if square < value {
-                low = mid + T::u7(1);
+                low = mid + crate_int!(1);
             } else {
-                high = mid - T::u7(1);
+                high = mid - crate_int!(1);
             }
         }
 
@@ -242,19 +243,19 @@ fn int_cbrt<T: Int>(value: T) -> T {
     } else if value.is_zero() {
         value
     } else {
-        let mut low = T::u7(1);
+        let mut low = crate_int!(1);
         let mut high = value;
 
         while low <= high {
-            let mid = (low + high) / T::u7(2);
+            let mid = (low + high) / crate_int!(2);
             let square = mid * mid * mid;
 
             if square == value {
                 return mid;
             } else if square < value {
-                low = mid + T::u7(1);
+                low = mid + crate_int!(1);
             } else {
-                high = mid - T::u7(1);
+                high = mid - crate_int!(1);
             }
         }
 

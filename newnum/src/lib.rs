@@ -7,8 +7,6 @@ pub use api::*;
 pub use primitive::*;
 pub use range::*;
 
-pub mod derive;
-
 pub use newnum_proc_macros::{float, int};
 
 /// Trait for types that represent abstract numbers.

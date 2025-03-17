@@ -61,9 +61,7 @@ pub trait Negative: Sign {
     fn neg_abs(self) -> Self;
 }
 /// Trait for types that can represent zero (maybe a number or a number container).
-pub trait Zero: Sign {
-    fn zero() -> Self;
-}
+pub trait Zero: Sign {}
 
 /// Trait for types that can't represent positive values (maybe a number or a number container).
 /// Its always guarenteed that a value of the type is not positive (```<= 0```).
@@ -201,12 +199,7 @@ macro_rules! uint_impl {
             }
         }
 
-        impl Zero for $type {
-            #[inline(always)]
-            fn zero() -> Self {
-                0
-            }
-        }
+        impl Zero for $type {}
 
         impl Positive for $type {
             #[inline(always)]
@@ -268,12 +261,7 @@ macro_rules! sint_impl {
             }
         }
 
-        impl Zero for $type {
-            #[inline(always)]
-            fn zero() -> Self {
-                0
-            }
-        }
+        impl Zero for $type {}
 
         impl Positive for $type {
             #[inline(always)]
@@ -344,12 +332,7 @@ macro_rules! float_impl {
             }
         }
 
-        impl Zero for $type {
-            #[inline(always)]
-            fn zero() -> Self {
-                0.0
-            }
-        }
+        impl Zero for $type {}
 
         impl Positive for $type {
             #[inline(always)]
