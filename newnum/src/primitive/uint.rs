@@ -1,4 +1,4 @@
-use super::{Int, UnsignedPrim};
+use crate::*;
 
 pub trait UInt: Int + UnsignedPrim {}
 

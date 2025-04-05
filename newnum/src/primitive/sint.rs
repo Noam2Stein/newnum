@@ -1,4 +1,4 @@
-use super::{Int, SignedPrim};
+use crate::*;
 
 pub trait SInt: Int + SignedPrim {}
 

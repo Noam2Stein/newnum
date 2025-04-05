@@ -1,8 +1,4 @@
-use std::ops::Neg;
-
-use crate::Negative;
-
-use super::Prim;
+use crate::*;
 
 pub trait SignedPrim: Prim + Negative + Neg<Output = Self> {}
 

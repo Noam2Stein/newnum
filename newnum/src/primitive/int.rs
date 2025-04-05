@@ -1,14 +1,6 @@
-use std::{
-    hash::Hash,
-    ops::{
-        BitAnd, BitAndAssign, BitOr, BitOrAssign, BitXor, BitXorAssign, Not, Shl, ShlAssign, Shr,
-        ShrAssign,
-    },
-};
+use std::hash::Hash;
 
-use crate::Whole;
-
-use super::Prim;
+use crate::*;
 
 pub trait Int:
     Prim

@@ -1,6 +1,4 @@
-use crate::{MinValue, NotNegative};
-
-use super::Prim;
+use crate::*;
 
 pub trait UnsignedPrim: Prim + NotNegative + MinValue {}
 

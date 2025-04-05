@@ -1,9 +1,8 @@
-use crate::{AHyper, ATrig, Hyper, Root, Trig};
-
-use super::SignedPrim;
+use crate::*;
 
 pub trait Float:
-    SignedPrim
+    FromFloatLiteral
+    + SignedPrim
     + Root<2>
     + Root<3>
     + Trig<Output = Self>
