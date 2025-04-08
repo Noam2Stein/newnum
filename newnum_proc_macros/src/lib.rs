@@ -1,7 +1,38 @@
 use derive_syn_parse::Parse;
-use proc_macro2::TokenStream;
+use proc_macro2::{Span, TokenStream};
 use quote::{format_ident, quote};
-use syn::{parse_macro_input, Lit, Token};
+use syn::{parse_macro_input, DeriveInput, Lit, Token};
+
+macro_rules! empty_derive_macros {
+    ($($derive_trait:ident($derive_macro_ident:ident) -> $($impl_trait:ident), * $(,)?); * $(;)?) => {
+        $(
+            #[proc_macro_derive($derive_trait)]
+            pub fn $derive_macro_ident(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+                let mut input = parse_macro_input!(input as DeriveInput);
+
+                let type_ident = &mut input.ident;
+                type_ident.set_span(Span::call_site());
+
+                let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
+
+                quote! {
+                    $(impl #impl_generics ::newnum::$impl_trait for #type_ident #ty_generics #where_clause {})*
+                }
+                .into()
+            }
+        )*
+    };
+}
+empty_derive_macros!(
+    Num(derive_num_macro) -> Num;
+    Prim(derive_prim_macro) -> Num, Prim;
+    Float(derive_float_macro) -> Num, Prim, Float;
+    Int(derive_int_macro) -> Num, Prim, Int;
+    SInt(derive_sint_macro) -> Num, Prim, Int, SignedPrim, SInt;
+    UInt(derive_uint_macro) -> Num, Prim, Int, UnsignedPrim, UInt;
+    SignedPrim(derive_signed_prim_macro) -> Num, Prim, SignedPrim;
+    UnsignedPrim(derive_unsigned_prim) -> Num, Prim, UnsignedPrim;
+);
 
 /// Converts a numeric literal into a `Num` type, generating a compile-time error if the literal is out of range for the type.
 ///

@@ -29,11 +29,7 @@ pub trait Prim:
     + Signum
     + AsPrim
     + WholeEquivalent
-    + TruncRoot<2>
-    + TruncRoot<3>
-    + IRoot<2>
-    + IRoot<3>
-    + IRound
+    + TruncRoot
     + Send
     + Sync
     + Debug

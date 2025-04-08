@@ -1,6 +1,6 @@
 use crate::*;
 
-pub trait UnsignedPrim: Prim + NotNegative + MinValue {}
+pub trait UnsignedPrim: Prim + NotNegative + TypeMin {}
 
 impl UnsignedPrim for u8 {}
 impl UnsignedPrim for u16 {}

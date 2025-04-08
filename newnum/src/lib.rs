@@ -9,7 +9,9 @@ pub use initialization::*;
 pub use primitive::*;
 pub use range::*;
 
-pub use newnum_proc_macros::{num, num_approx};
+pub use newnum_proc_macros::{
+    num, num_approx, Float, Int, Num, Prim, SInt, SignedPrim, UInt, UnsignedPrim,
+};
 
 #[allow(unused_imports)]
 use newnum_proc_macros::{internal_num, internal_num_approx};
@@ -26,8 +28,7 @@ pub trait Num:
     FromIntLiteral
     + AbsDiff<Output = Self>
     + MinMax
-    + TruncRoot<2, Root = Self>
-    + TruncRoot<3, Root = Self>
+    + TruncRoot
     + Round
     + Sign<BoolMapped = bool>
     + PartialEq

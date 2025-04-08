@@ -3,7 +3,7 @@ use std::fmt::Display;
 use derive_more::derive::{
     Add, AddAssign, Div, DivAssign, Mul, MulAssign, Rem, RemAssign, Sub, SubAssign,
 };
-use newnum::{ATrig, IRound, WholeEquivalent};
+use newnum::{ATrig, WholeEquivalent};
 
 use crate::{angle::Angle, whole_ratio::WholeRatio};
 
@@ -22,9 +22,7 @@ impl Display for Ratio {
 
 impl WholeEquivalent for Ratio {
     type Whole = WholeRatio;
-}
 
-impl IRound for Ratio {
     fn iround(self) -> Self::Whole {
         WholeRatio(self.0.iround())
     }

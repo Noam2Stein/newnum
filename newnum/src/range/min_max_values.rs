@@ -1,58 +1,58 @@
 /// For types with a minimum value.
 ///
-/// * Not all `Num`s implement `MinValue` / `MaxValue`, because they may not have value limits.
+/// * Not all `Num`s implement `TypeMin` / `TypeMax`, because they may not have value limits.
 /// For example a heap allocated int could rise infinitly until there is no more heap memory.
-pub trait MinValue: PartialOrd {
-    fn min_val() -> Self;
+pub trait TypeMin {
+    fn type_min() -> Self;
 }
 
 /// For types with a maximum value.
 ///
 /// * Not all `Num`s implement `MinValue` / `MaxValue`, because they may not have value limits.
 /// For example a heap allocated int could rise infinitly until there is no more heap memory.
-pub trait MaxValue: PartialOrd {
-    fn max_val() -> Self;
+pub trait TypeMax {
+    fn type_max() -> Self;
 }
 
 /// For types without a minimum value.
 ///
 /// * In the future when rust supports negative traits (`!SomeTrait`),
-/// this trait will be replaced with `!MinValue`.
-pub trait NoMinValue: PartialOrd {}
+/// this trait will be replaced with `!TypeMin`.
+pub trait NoTypeMin: PartialOrd {}
 
 /// For types without a maximum value.
 ///
 /// * In the future when rust supports negative traits (`!SomeTrait`),
-/// this trait will be replaced with `!MaxValue`.
-pub trait NoMaxValue: PartialOrd {}
+/// this trait will be replaced with `!TypeMax`.
+pub trait NoTypeMax: PartialOrd {}
 
 /// Trait for types with both minimum and maximum values.
 ///
 /// * This trait is a shortcut for `MinValue + MaxValue`, so it is auto implemented.
 ///
 /// * In the future when rust supports trait aliases (like type aliases), this will be made into a trait alias.
-pub trait Finite: MinValue + MaxValue {}
+pub trait Bounded: TypeMin + TypeMax {}
 
 /// Trait for types with no minimum AND no maximum value.
 ///
 /// * This trait is a shortcut for `NoMinValue + NoMaxValue`, so it is auto implemented.
 ///
 /// * In the future when rust supports trait aliases (like type aliases), this will be made into a trait alias.
-pub trait Infinite: NoMinValue + NoMaxValue {}
+pub trait Unbounded: NoTypeMin + NoTypeMax {}
 
-impl<T: MinValue + MaxValue> Finite for T {}
-impl<T: NoMinValue + NoMaxValue> Infinite for T {}
+impl<T: TypeMin + TypeMax> Bounded for T {}
+impl<T: NoTypeMin + NoTypeMax> Unbounded for T {}
 
 macro_rules! prim_impl {
     ($ty:ty) => {
-        impl MinValue for $ty {
-            fn min_val() -> Self {
+        impl TypeMin for $ty {
+            fn type_min() -> Self {
                 Self::MIN
             }
         }
 
-        impl MaxValue for $ty {
-            fn max_val() -> Self {
+        impl TypeMax for $ty {
+            fn type_max() -> Self {
                 Self::MAX
             }
         }

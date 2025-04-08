@@ -1,7 +1,7 @@
 pub trait FloatingEquivalent {
     type Floating: Floating;
 
-    fn floating(self) -> Self::Floating;
+    fn float(self) -> Self::Floating;
 }
 
 pub trait Floating: FloatingEquivalent<Floating = Self> {}
@@ -14,7 +14,7 @@ macro_rules! float_impl {
             type Floating = Self;
 
             #[inline(always)]
-            fn floating(self) -> Self::Floating {
+            fn float(self) -> Self::Floating {
                 self
             }
         }
@@ -29,7 +29,7 @@ macro_rules! int_impl {
             type Floating = $floating;
 
             #[inline(always)]
-            fn floating(self) -> Self::Floating {
+            fn float(self) -> Self::Floating {
                 self as _
             }
         }

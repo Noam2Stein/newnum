@@ -3,8 +3,7 @@ use crate::*;
 pub trait Float:
     FromFloatLiteral
     + SignedPrim
-    + Root<2>
-    + Root<3>
+    + Root
     + Trig<Output = Self>
     + ATrig<Output = Self>
     + Hyper<Output = Self>
