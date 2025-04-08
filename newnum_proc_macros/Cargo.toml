@@ -1,7 +1,9 @@
 [package]
-edition = "2021"
-name    = "newnum_proc_macros"
-version = "0.0.9"
+description = "Procedural macros meant to be rexported through the `newnum` crate"
+edition     = "2021"
+license     = "MIT"
+name        = "newnum_proc_macros"
+version     = "0.0.9"
 
 [lib]
 
