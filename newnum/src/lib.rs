@@ -3,11 +3,9 @@ use std::ops::*;
 mod api;
 mod initialization;
 mod primitive;
-mod range;
 pub use api::*;
 pub use initialization::*;
 pub use primitive::*;
-pub use range::*;
 
 pub use newnum_proc_macros::{
     num, num_approx, Float, Int, Num, Prim, SInt, SignedPrim, UInt, UnsignedPrim,
