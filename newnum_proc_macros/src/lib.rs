@@ -3,6 +3,14 @@ use proc_macro2::{Span, TokenStream};
 use quote::{format_ident, quote};
 use syn::{parse_macro_input, DeriveInput, Lit, Token};
 
+mod derive_bound;
+mod sign;
+
+#[proc_macro_derive(Sign, attributes(derive_bound))]
+pub fn sign_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    sign::sign_derive_macro(input)
+}
+
 macro_rules! empty_derive_macros {
     ($($derive_trait:ident($derive_macro_ident:ident) -> $($impl_trait:ident), * $(,)?); * $(;)?) => {
         $(
