@@ -221,9 +221,7 @@ pub trait Signum: Sign {
     ///
     /// * This function is named `signumt` and not `signum` because in the standard-library,
     /// `f32/f64::signum` acts using a `2-value-sign` and not a `3-value-sign`.
-    fn signumt(self) -> Self
-    where
-        Self: Zero;
+    fn signumt(self) -> Self;
 
     /// Returns either `1` or `-1` based on the number's `2-value-sign`:
     /// - `self > 0 => 1`,
