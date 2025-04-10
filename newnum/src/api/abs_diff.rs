@@ -1,6 +1,26 @@
 use std::ops::Sub;
 
-pub trait AbsDiff: Sized + Sub {
+/// Trait for `abs_diff` method, which computes the absolute difference between two numbers.
+/// `abs_diff` is equivalent to `(a - b).abs()`, not `a.abs() - b.abs()`.
+///
+/// This trait is generic over `Rhs` which is default to `Self`, like multi-side operator traits.
+/// It is required that `Self` is `Sub<Rhs>` and `Rhs` is `Sub<Self>` where they both have the same output type.
+///
+/// ### Example
+///
+/// ```
+/// use newnum::*;
+///
+/// fn main() {
+///     assert(10.abs_diff(20) == 10);
+///     assert((-10).abs_diff(20) == 30);
+/// }
+/// ```
+pub trait AbsDiff<Rhs = Self>: Sized
+where
+    Self: Sub<Rhs>,
+    Rhs: Sub<Self, Output = Self::Output>,
+{
     fn abs_diff(self, rhs: Self) -> Self::Output;
 }
 
