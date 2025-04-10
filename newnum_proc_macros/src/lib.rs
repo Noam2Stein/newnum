@@ -1,8 +1,5 @@
-use proc_macro2::Span;
-use quote::quote;
-use syn::{parse_macro_input, DeriveInput};
-
 mod derive_attributes;
+mod derive_empty;
 mod derive_sign;
 mod num;
 
@@ -27,36 +24,10 @@ pub fn sign_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStr
 //
 //
 
-macro_rules! empty_derive_macros {
-    ($($derive_trait:ident($derive_macro_ident:ident) -> $($impl_trait:ident), * $(,)?); * $(;)?) => {
-        $(
-            #[proc_macro_derive($derive_trait)]
-            pub fn $derive_macro_ident(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
-                let mut input = parse_macro_input!(input as DeriveInput);
-
-                let type_ident = &mut input.ident;
-                type_ident.set_span(Span::call_site());
-
-                let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
-
-                quote! {
-                    $(impl #impl_generics ::newnum::$impl_trait for #type_ident #ty_generics #where_clause {})*
-                }
-                .into()
-            }
-        )*
-    };
+#[proc_macro_derive(Num, attributes(derive_bound))]
+pub fn num_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    derive_empty::num_derive_macro(input)
 }
-empty_derive_macros!(
-    Num(derive_num_macro) -> Num;
-    Prim(derive_prim_macro) -> Num, Prim;
-    Float(derive_float_macro) -> Num, Prim, Float;
-    Int(derive_int_macro) -> Num, Prim, Int;
-    SInt(derive_sint_macro) -> Num, Prim, Int, SignedPrim, SInt;
-    UInt(derive_uint_macro) -> Num, Prim, Int, UnsignedPrim, UInt;
-    SignedPrim(derive_signed_prim_macro) -> Num, Prim, SignedPrim;
-    UnsignedPrim(derive_unsigned_prim) -> Num, Prim, UnsignedPrim;
-);
 
 //
 //
