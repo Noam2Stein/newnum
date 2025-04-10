@@ -15,8 +15,7 @@ mod num;
 //
 
 /// `Sign` derive macro.
-/// `Sign` is a trait with 5 methods:
-/// `is_positive`, `is_negative`, `is_zero`, `is_bin_positive`, and `is_bin_negative`.
+/// `Sign` is a trait with methods that check sign attributes.
 /// This macro expects the type to only have one field,
 /// and redirects the trait methods to the field as `Sign`.
 ///
@@ -34,7 +33,7 @@ mod num;
 /// ### Example
 ///
 /// ```
-/// use newnum::Num;
+/// use newnum::*;
 ///
 /// #[derive(Sign)]
 /// #[derive_bound(Sign; T: Sign)]
@@ -53,6 +52,27 @@ pub fn sign_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStr
 //
 //
 
+/// `Round` derive macro.
+/// for each method,
+/// the derive implementation maps each field using the method.
+///
+/// ### Generics
+///
+/// For types with generic parameters,
+/// `Round` will be implemented with no additional trait-bounds.
+///
+/// To add bounds to the derive, use the `derive_bound` attribute which follows this syntax:
+/// `#[derive_bound(<trait-ident>; <where-predicate>, ...)]`.
+///
+/// ### Example
+///
+/// ```
+/// use newnum::*;
+///
+/// #[derive(Round)]
+/// #[derive_bound(Round; T: Round)]
+/// struct Fun<T>(T);
+/// ```
 #[proc_macro_derive(Round, attributes(derive_bound))]
 pub fn round_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     derive_round::round_derive_macro(input)
@@ -66,21 +86,117 @@ pub fn round_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenSt
 //
 //
 
+/// `Trig` derive macro.
+/// for each method,
+/// the derive implementation maps each field using the method.
+///
+/// `Trig`'s methods return `Self::Output`.
+/// This macro expects that for each field: `T::Output = T`.
+///
+/// ### Generics
+///
+/// For types with generic parameters,
+/// `Trig` will be implemented with no additional trait-bounds.
+///
+/// To add bounds to the derive, use the `derive_bound` attribute which follows this syntax:
+/// `#[derive_bound(<trait-ident>; <where-predicate>, ...)]`.
+///
+/// ### Example
+///
+/// ```
+/// use newnum::*;
+///
+/// #[derive(Trig)]
+/// #[derive_bound(Trig; T: Trig)]
+/// struct Fun<T>(T);
+/// ```
 #[proc_macro_derive(Trig, attributes(derive_bound))]
 pub fn trig_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     derive_trig::trig_derive_macro(input)
 }
 
+/// `ATrig` derive macro.
+/// for each method,
+/// the derive implementation maps each field using the method.
+///
+/// `ATrig`'s methods return `Self::Output`.
+/// This macro expects that for each field: `T::Output = T`.
+///
+/// ### Generics
+///
+/// For types with generic parameters,
+/// `ATrig` will be implemented with no additional trait-bounds.
+///
+/// To add bounds to the derive, use the `derive_bound` attribute which follows this syntax:
+/// `#[derive_bound(<trait-ident>; <where-predicate>, ...)]`.
+///
+/// ### Example
+///
+/// ```
+/// use newnum::*;
+///
+/// #[derive(ATrig)]
+/// #[derive_bound(ATrig; T: ATrig)]
+/// struct Fun<T>(T);
+/// ```
 #[proc_macro_derive(ATrig, attributes(derive_bound))]
 pub fn atrig_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     derive_trig::atrig_derive_macro(input)
 }
 
+/// `Hyper` derive macro.
+/// for each method,
+/// the derive implementation maps each field using the method.
+///
+/// `Hyper`'s methods return `Self::Output`.
+/// This macro expects that for each field: `T::Output = T`.
+///
+/// ### Generics
+///
+/// For types with generic parameters,
+/// `Hyper` will be implemented with no additional trait-bounds.
+///
+/// To add bounds to the derive, use the `derive_bound` attribute which follows this syntax:
+/// `#[derive_bound(<trait-ident>; <where-predicate>, ...)]`.
+///
+/// ### Example
+///
+/// ```
+/// use newnum::*;
+///
+/// #[derive(Hyper)]
+/// #[derive_bound(Hyper; T: Hyper)]
+/// struct Fun<T>(T);
+/// ```
 #[proc_macro_derive(Hyper, attributes(derive_bound))]
 pub fn hyper_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     derive_trig::hyper_derive_macro(input)
 }
 
+/// `AHyper` derive macro.
+/// for each method,
+/// the derive implementation maps each field using the method.
+///
+/// `AHyper`'s methods return `Self::Output`.
+/// This macro expects that for each field: `T::Output = T`.
+///
+/// ### Generics
+///
+/// For types with generic parameters,
+/// `AHyper` will be implemented with no additional trait-bounds.
+///
+/// To add bounds to the derive, use the `derive_bound` attribute which follows this syntax:
+/// `#[derive_bound(<trait-ident>; <where-predicate>, ...)]`.
+///
+/// ### Example
+///
+/// ```
+/// use newnum::*;
+///
+/// #[derive(AHyper)]
+/// #[derive_bound(AHyper; T: AHyper)]
+/// struct Fun<T>(T);
+/// ```
 #[proc_macro_derive(AHyper, attributes(derive_bound))]
 pub fn ahyper_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     derive_trig::ahyper_derive_macro(input)
@@ -109,7 +225,7 @@ pub fn ahyper_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenS
 /// ### Example
 ///
 /// ```
-/// use newnum::Num;
+/// use newnum::*;
 ///
 /// #[derive(Num)]
 /// #[derive_bound(Num; T: Num)]
@@ -139,7 +255,7 @@ pub fn num_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStre
 /// ### Example
 ///
 /// ```
-/// use newnum::num;
+/// use newnum::*;
 ///
 /// fn inc(value: &mut impl Num) {
 ///    *value += num!(1)
@@ -154,7 +270,7 @@ pub fn num_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStre
 /// Example:
 ///
 ///```
-/// use newnum::num;
+/// use newnum::*;
 ///
 /// fn add_alot(value: &mut impl Num) {
 ///     //        |<- ERROR: evaluation of `add_alot::num_macro_fn::<u8>::{constant#0}` failed
@@ -184,7 +300,7 @@ pub fn num(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
 /// ### Example
 ///
 /// ```
-/// use newnum::num;
+/// use newnum::*;
 ///
 /// fn example<T: Float>() -> T {
 ///     num_approx!(16_777_217)
@@ -199,7 +315,7 @@ pub fn num(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
 /// Example:
 ///
 ///```
-/// use newnum::num;
+/// use newnum::*;
 ///
 /// fn add_alot(value: &mut impl Num) {
 ///     //        |<- ERROR: evaluation of `add_alot::num_macro_fn::<u8>::{constant#0}` failed
@@ -230,7 +346,7 @@ pub fn num_approx(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
 /// ### Example
 ///
 /// ```
-/// use newnum::num;
+/// use newnum::*;
 ///
 /// fn inc(value: &mut impl Num) {
 ///    *value += num!(1)
@@ -245,7 +361,7 @@ pub fn num_approx(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
 /// Example:
 ///
 ///```
-/// use newnum::num;
+/// use newnum::*;
 ///
 /// fn add_alot(value: &mut impl Num) {
 ///     //        |<- ERROR: evaluation of `add_alot::num_macro_fn::<u8>::{constant#0}` failed
@@ -277,7 +393,7 @@ pub fn internal_num(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
 /// ### Example
 ///
 /// ```
-/// use newnum::num;
+/// use newnum::*;
 ///
 /// fn example<T: Float>() -> T {
 ///     num_approx!(16_777_217)
@@ -292,7 +408,7 @@ pub fn internal_num(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
 /// Example:
 ///
 ///```
-/// use newnum::num;
+/// use newnum::*;
 ///
 /// fn add_alot(value: &mut impl Num) {
 ///     //        |<- ERROR: evaluation of `add_alot::num_macro_fn::<u8>::{constant#0}` failed
