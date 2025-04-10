@@ -11,6 +11,32 @@ mod num;
 //
 //
 
+/// `Sign` derive macro.
+/// `Sign` is a trait with 5 methods:
+/// `is_positive`, `is_negative`, `is_zero`, `is_bin_positive`, and `is_bin_negative`.
+/// This macro expects the type to only have one field,
+/// and redirects the trait methods to the field as `Sign`.
+///
+/// `Sign`'s methods return `Self::BoolMapped`.
+/// This macro expects the field's `BoolMapped` type to be `bool`.
+///
+/// ### Generics
+///
+/// For types with generic parameters,
+/// `Sign` will be implemented with no additional trait-bounds.
+///
+/// To add bounds to the derive, use the `derive_bound` attribute which follows this syntax:
+/// `#[derive_bound(<trait-ident>; <where-predicate>, ...)]`.
+///
+/// ### Example
+///
+/// ```
+/// use newnum::Num;
+///
+/// #[derive(Sign)]
+/// #[derive_bound(Sign; T: Sign)]
+/// struct Fun<T>(T);
+/// ```
 #[proc_macro_derive(Sign, attributes(derive_bound))]
 pub fn sign_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     derive_sign::sign_derive_macro(input)
