@@ -4,7 +4,7 @@ edition     = "2021"
 license     = "MIT"
 name        = "newnum_proc_macros"
 readme      = "README.md"
-version     = "0.0.10"
+version     = "0.0.11"
 
 [lib]
 

@@ -5,6 +5,7 @@ mod derive_min_max;
 mod derive_round;
 mod derive_sign;
 mod derive_trig;
+mod derive_type_min_max;
 mod derive_whole;
 mod num;
 
@@ -78,6 +79,66 @@ pub fn sign_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStr
 #[proc_macro_derive(MinMax, attributes(derive_bound))]
 pub fn min_max_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     derive_min_max::min_max_derive_macro(input)
+}
+
+//
+//
+//
+// TYPE-MIN, TYPE-MAX DERIVE MACROS
+//
+//
+//
+
+/// `TypeMin` derive macro.
+/// Initializes the `type_min` of each field,
+/// and for enum requires a single variant to be labeled as `type_min`.
+///
+/// ### Generics
+///
+/// For types with generic parameters,
+/// `TypeMin` will be implemented with no additional trait-bounds.
+///
+/// To add bounds to the derive, use the `derive_bound` attribute which follows this syntax:
+/// `#[derive_bound(<trait-ident>; <where-predicate>, ...)]`.
+///
+/// ### Example
+///
+/// ```
+/// use newnum::*;
+///
+/// #[derive(TypeMin)]
+/// #[derive_bound(TypeMin; T: TypeMin)]
+/// struct Fun<T>(T);
+/// ```
+#[proc_macro_derive(TypeMin, attributes(derive_bound, type_min))]
+pub fn type_min_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    derive_type_min_max::type_min_derive_macro(input)
+}
+
+/// `TypeMax` derive macro.
+/// Initializes the `type_max` of each field,
+/// and for enum requires a single variant to be labeled as `type_max`.
+///
+/// ### Generics
+///
+/// For types with generic parameters,
+/// `TypeMin` will be implemented with no additional trait-bounds.
+///
+/// To add bounds to the derive, use the `derive_bound` attribute which follows this syntax:
+/// `#[derive_bound(<trait-ident>; <where-predicate>, ...)]`.
+///
+/// ### Example
+///
+/// ```
+/// use newnum::*;
+///
+/// #[derive(TypeMax)]
+/// #[derive_bound(TypeMax; T: TypeMax)]
+/// struct Fun<T>(T);
+/// ```
+#[proc_macro_derive(TypeMax, attributes(derive_bound, type_max))]
+pub fn type_max_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    derive_type_min_max::type_max_derive_macro(input)
 }
 
 //
