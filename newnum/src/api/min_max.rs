@@ -14,7 +14,6 @@ pub trait MinMax: Sized {
 macro_rules! prim_impl {
     ($type:ident) => {
         impl MinMax for $type {
-            #[inline(always)]
             fn min(self, other: Self) -> Self {
                 if self < other {
                     self
@@ -22,13 +21,21 @@ macro_rules! prim_impl {
                     other
                 }
             }
-
-            #[inline(always)]
             fn max(self, other: Self) -> Self {
                 if self > other {
                     self
                 } else {
                     other
+                }
+            }
+
+            fn clamp(self, min: Self, max: Self) -> Self {
+                if self < min {
+                    min
+                } else if self > max {
+                    max
+                } else {
+                    self
                 }
             }
         }
