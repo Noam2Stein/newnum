@@ -35,12 +35,12 @@ pub fn derive_map_fields(
                 .collect::<Vec<_>>();
 
             let variant_fields = data.variants.iter().map(|variant| match &variant.fields {
-                syn::Fields::Named(fields) => {
+                Fields::Named(fields) => {
                     let field_idents = fields.named.iter().map(|f| &f.ident);
 
                     quote! { { #(#field_idents), * } }
                 }
-                syn::Fields::Unnamed(fields) => {
+                Fields::Unnamed(fields) => {
                     let field_idents = fields
                         .unnamed
                         .iter()
@@ -49,7 +49,7 @@ pub fn derive_map_fields(
 
                     quote! { (#(#field_idents), *) }
                 }
-                syn::Fields::Unit => quote! {},
+                Fields::Unit => quote! {},
             });
 
             let variant_members = data

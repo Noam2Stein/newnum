@@ -8,7 +8,8 @@ pub use initialization::*;
 pub use primitive::*;
 
 pub use newnum_proc_macros::{
-    num, num_approx, AHyper, ATrig, Hyper, MinMax, Num, Round, Sign, Trig, TypeMax, TypeMin, Whole,
+    num, num_approx, AHyper, ATrig, AbsDiff, Hyper, MinMax, Num, Round, Sign, Trig, TypeMax,
+    TypeMin, Whole,
 };
 
 #[allow(unused_imports)]

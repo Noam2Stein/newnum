@@ -1,5 +1,6 @@
 mod util;
 
+mod derive_abs_diff;
 mod derive_empty;
 mod derive_min_max;
 mod derive_round;
@@ -45,6 +46,39 @@ mod num;
 #[proc_macro_derive(Sign, attributes(derive_bound))]
 pub fn sign_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     derive_sign::sign_derive_macro(input)
+}
+
+//
+//
+//
+// ABS-DIFF DERIVE MACRO
+//
+//
+//
+
+/// `AbsDiff` derive macro.
+/// maps each field using the method.
+///
+/// ### Generics
+///
+/// For types with generic parameters,
+/// `AbsDiff` will be implemented with no additional trait-bounds.
+///
+/// To add bounds to the derive, use the `derive_bound` attribute which follows this syntax:
+/// `#[derive_bound(<trait-ident>; <where-predicate>, ...)]`.
+///
+/// ### Example
+///
+/// ```
+/// use newnum::*;
+///
+/// #[derive(AbsDiff)]
+/// #[derive_bound(AbsDiff; T: AbsDiff<Output = T>)]
+/// struct Fun<T>(T);
+/// ```
+#[proc_macro_derive(AbsDiff, attributes(derive_bound))]
+pub fn abs_diff_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    derive_abs_diff::abs_diff_derive_macro(input)
 }
 
 //
