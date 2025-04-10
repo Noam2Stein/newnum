@@ -16,11 +16,7 @@ use std::ops::Sub;
 ///     assert((-10).abs_diff(20) == 30);
 /// }
 /// ```
-pub trait AbsDiff<Rhs = Self>: Sized
-where
-    Self: Sub<Rhs>,
-    Rhs: Sub<Self, Output = Self::Output>,
-{
+pub trait AbsDiff<Rhs: Sub<Self, Output = Self::Output> = Self>: Sized + Sub<Rhs> {
     fn abs_diff(self, rhs: Self) -> Self::Output;
 }
 
