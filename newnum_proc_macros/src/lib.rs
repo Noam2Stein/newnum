@@ -3,6 +3,7 @@ mod util;
 mod derive_empty;
 mod derive_round;
 mod derive_sign;
+mod derive_trig;
 mod num;
 
 //
@@ -50,10 +51,39 @@ pub fn sign_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStr
 // ROUND DERIVE MACRO
 //
 //
+//
 
 #[proc_macro_derive(Round, attributes(derive_bound))]
 pub fn round_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     derive_round::round_derive_macro(input)
+}
+
+//
+//
+//
+// TRIG DERIVE MACROS
+//
+//
+//
+
+#[proc_macro_derive(Trig, attributes(derive_bound))]
+pub fn trig_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    derive_trig::trig_derive_macro(input)
+}
+
+#[proc_macro_derive(ATrig, attributes(derive_bound))]
+pub fn atrig_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    derive_trig::atrig_derive_macro(input)
+}
+
+#[proc_macro_derive(Hyper, attributes(derive_bound))]
+pub fn hyper_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    derive_trig::hyper_derive_macro(input)
+}
+
+#[proc_macro_derive(AHyper, attributes(derive_bound))]
+pub fn ahyper_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    derive_trig::ahyper_derive_macro(input)
 }
 
 //

@@ -13,3 +13,6 @@ enum Fun2 {
     A { a: i8 },
     B(i8),
 }
+
+#[derive(Round, Trig, ATrig, Hyper, AHyper)]
+struct Fun3(f32, f32);
