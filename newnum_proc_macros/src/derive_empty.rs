@@ -1,7 +1,7 @@
 use quote::quote;
 use syn::{parse_macro_input, DeriveInput};
 
-use crate::derive_attributes::derive_split_generics;
+use crate::util::derive_split_generics;
 
 pub fn num_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let input = parse_macro_input!(input as DeriveInput);

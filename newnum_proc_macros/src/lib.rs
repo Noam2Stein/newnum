@@ -1,5 +1,7 @@
-mod derive_attributes;
+mod util;
+
 mod derive_empty;
+mod derive_round;
 mod derive_sign;
 mod num;
 
@@ -40,6 +42,18 @@ mod num;
 #[proc_macro_derive(Sign, attributes(derive_bound))]
 pub fn sign_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     derive_sign::sign_derive_macro(input)
+}
+
+//
+//
+//
+// ROUND DERIVE MACRO
+//
+//
+
+#[proc_macro_derive(Round, attributes(derive_bound))]
+pub fn round_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    derive_round::round_derive_macro(input)
 }
 
 //
