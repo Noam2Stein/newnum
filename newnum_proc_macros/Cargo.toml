@@ -3,6 +3,7 @@ description = "Procedural macros meant to be rexported through the `newnum` crat
 edition     = "2021"
 license     = "MIT"
 name        = "newnum_proc_macros"
+readme      = "README.md"
 version     = "0.0.9"
 
 [lib]
