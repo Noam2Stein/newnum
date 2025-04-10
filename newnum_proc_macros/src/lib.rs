@@ -1,6 +1,7 @@
 mod util;
 
 mod derive_empty;
+mod derive_min_max;
 mod derive_round;
 mod derive_sign;
 mod derive_trig;
@@ -43,6 +44,40 @@ mod num;
 #[proc_macro_derive(Sign, attributes(derive_bound))]
 pub fn sign_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     derive_sign::sign_derive_macro(input)
+}
+
+//
+//
+//
+// MIN-MAX DERIVE MACROS
+//
+//
+//
+
+/// `MinMax` derive macro.
+/// for each method,
+/// the derive implementation maps each field using the method.
+///
+/// ### Generics
+///
+/// For types with generic parameters,
+/// `MinMax` will be implemented with no additional trait-bounds.
+///
+/// To add bounds to the derive, use the `derive_bound` attribute which follows this syntax:
+/// `#[derive_bound(<trait-ident>; <where-predicate>, ...)]`.
+///
+/// ### Example
+///
+/// ```
+/// use newnum::*;
+///
+/// #[derive(MinMax)]
+/// #[derive_bound(MinMax; T: MinMax)]
+/// struct Fun<T>(T);
+/// ```
+#[proc_macro_derive(MinMax, attributes(derive_bound))]
+pub fn min_max_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    derive_min_max::min_max_derive_macro(input)
 }
 
 //
