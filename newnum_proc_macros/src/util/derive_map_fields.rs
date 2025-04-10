@@ -72,11 +72,13 @@ pub fn derive_map_fields(
                 Fields::Unit => Vec::new(),
             });
 
-            quote! {#(
-                #variant_idents #variant_fields => Self::#variant_idents {#(
-                    #variant_members: #variant_member_values,
-                )*},
-            )*}
+            quote! {
+                match self {#(
+                    Self::#variant_idents #variant_fields => Self::#variant_idents {#(
+                        #variant_members: #variant_member_values,
+                    )*},
+                )*}
+            }
         }
         Data::Union(_) => Error::new(
             Span::call_site(),
