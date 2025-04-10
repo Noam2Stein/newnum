@@ -24,6 +24,27 @@ pub fn sign_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStr
 //
 //
 
+/// `Num` derive macro.
+/// `Num` is an empty trait that has many super-traits,
+/// this macro only derives `Num` and not its super-traits.
+///
+/// ### Generics
+///
+/// For types with generic parameters,
+/// `Num` will be implemented with no additional trait-bounds.
+///
+/// To add bounds to the derive, use the `derive_bound` attribute which follows this syntax:
+/// `#[derive_bound(<trait-ident>; <where-predicate>, ...)]`.
+///
+/// ### Example
+///
+/// ```
+/// use newnum::Num;
+///
+/// #[derive(Num)]
+/// #[derive_bound(Num; T: Num)]
+/// struct Fun<T>(T);
+/// ```
 #[proc_macro_derive(Num, attributes(derive_bound))]
 pub fn num_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     derive_empty::num_derive_macro(input)
