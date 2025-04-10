@@ -9,7 +9,7 @@ fn main() {
 struct Fun<T: Round>(T);
 
 #[derive(Sign, Round)]
-enum Fun2 {
+enum _Fun2 {
     A { a: i8 },
     B(i8),
 }

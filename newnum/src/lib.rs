@@ -7,7 +7,9 @@ pub use api::*;
 pub use initialization::*;
 pub use primitive::*;
 
-pub use newnum_proc_macros::{num, num_approx, AHyper, ATrig, Hyper, Num, Round, Sign, Trig};
+pub use newnum_proc_macros::{
+    num, num_approx, AHyper, ATrig, Hyper, Num, Round, Sign, Trig, Whole,
+};
 
 #[allow(unused_imports)]
 use newnum_proc_macros::{internal_num, internal_num_approx};

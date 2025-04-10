@@ -3,13 +3,14 @@ use std::fmt::Display;
 use derive_more::derive::{
     Add, AddAssign, Div, DivAssign, Mul, MulAssign, Rem, RemAssign, Sub, SubAssign,
 };
-use newnum::{ATrig, WholeEquivalent};
+use newnum::*;
 
 use crate::{angle::Angle, whole_ratio::WholeRatio};
 
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
 #[derive(Add, Sub, Mul, Div, Rem)]
 #[derive(AddAssign, SubAssign, MulAssign, DivAssign, RemAssign)]
+#[derive(Round)]
 pub struct Ratio(pub f64);
 
 impl Display for Ratio {

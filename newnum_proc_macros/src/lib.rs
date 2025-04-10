@@ -4,6 +4,7 @@ mod derive_empty;
 mod derive_round;
 mod derive_sign;
 mod derive_trig;
+mod derive_whole;
 mod num;
 
 //
@@ -76,6 +77,40 @@ pub fn sign_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStr
 #[proc_macro_derive(Round, attributes(derive_bound))]
 pub fn round_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     derive_round::round_derive_macro(input)
+}
+
+/// `Whole` derive macro.
+/// `Whole` is a trait that has no methods and is used to mark types as always round.
+/// This derive macro doesn't verify anything about the data in the type,
+/// so make sure the type should be `Whole` when using this derive macro.
+///
+/// This derive macro also derives `Round`,
+/// with an implementation that doesn't do anything to round the values because they are already whole.
+///
+/// ### Generics
+///
+/// For types with generic parameters,
+/// `Whole` will be implemented with no additional trait-bounds.
+///
+/// To add bounds to the derive, use the `derive_bound` attribute which follows this syntax:
+/// `#[derive_bound(<trait-ident>; <where-predicate>, ...)]`.
+///
+/// * If `derive_bound` is used, the `Round` trait will not be derived automatically,
+///   and will need to be seperately derived using the `Round` derive macro.
+///
+/// ### Example
+///
+/// ```
+/// use newnum::*;
+///
+/// #[derive(Whole, Round)]
+/// #[derive_bound(Whole; T: Whole)]
+/// #[derive_bound(Round; T: Round)]
+/// struct Fun<T>(T);
+/// ```
+#[proc_macro_derive(Whole, attributes(derive_bound))]
+pub fn whole_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    derive_whole::whole_derive_macro(input)
 }
 
 //
