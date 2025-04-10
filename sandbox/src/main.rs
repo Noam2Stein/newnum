@@ -7,3 +7,9 @@ fn main() {
 #[derive(Sign, Round)]
 #[derive_bound(Sign; T: Sign<BoolMapped = bool>)]
 struct Fun<T: Round>(T);
+
+#[derive(Sign, Round)]
+enum Fun2 {
+    A { a: i8 },
+    B(i8),
+}
