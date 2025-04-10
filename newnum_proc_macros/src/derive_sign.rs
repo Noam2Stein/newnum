@@ -2,9 +2,8 @@ use proc_macro2::Span;
 use quote::quote;
 use syn::{parse_macro_input, spanned::Spanned, Data, DeriveInput, Error};
 
-use crate::derive_bound::derive_split_generics;
+use crate::derive_attributes::derive_split_generics;
 
-//#[proc_macro_derive(Sign, attributes(derive_bound))]
 pub fn sign_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
 

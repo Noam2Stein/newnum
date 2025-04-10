@@ -1,15 +1,31 @@
-use derive_syn_parse::Parse;
-use proc_macro2::{Span, TokenStream};
-use quote::{format_ident, quote};
-use syn::{parse_macro_input, DeriveInput, Lit, Token};
+use proc_macro2::Span;
+use quote::quote;
+use syn::{parse_macro_input, DeriveInput};
 
-mod derive_bound;
-mod sign;
+mod derive_attributes;
+mod derive_sign;
+mod num;
+
+//
+//
+//
+// SIGN DERIVE MACROS
+//
+//
+//
 
 #[proc_macro_derive(Sign, attributes(derive_bound))]
 pub fn sign_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
-    sign::sign_derive_macro(input)
+    derive_sign::sign_derive_macro(input)
 }
+
+//
+//
+//
+// EMPTY DERIVE MACROS
+//
+//
+//
 
 macro_rules! empty_derive_macros {
     ($($derive_trait:ident($derive_macro_ident:ident) -> $($impl_trait:ident), * $(,)?); * $(;)?) => {
@@ -41,6 +57,14 @@ empty_derive_macros!(
     SignedPrim(derive_signed_prim_macro) -> Num, Prim, SignedPrim;
     UnsignedPrim(derive_unsigned_prim) -> Num, Prim, UnsignedPrim;
 );
+
+//
+//
+//
+// NUM MACROS
+//
+//
+//
 
 /// Converts a numeric literal into a `Num` type, generating a compile-time error if the literal is out of range for the type.
 ///
@@ -83,12 +107,7 @@ empty_derive_macros!(
 /// ```
 #[proc_macro]
 pub fn num(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
-    num_macro_helper(
-        "from_int_literal",
-        "from_float_literal",
-        quote! { ::newnum },
-        input,
-    )
+    num::num(input)
 }
 
 /// Converts a numeric literal into a `Num` type, generating a compile-time error if the literal is out of range for the type.
@@ -133,12 +152,7 @@ pub fn num(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
 /// ```
 #[proc_macro]
 pub fn num_approx(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
-    num_macro_helper(
-        "approx_from_int_literal",
-        "approx_from_float_literal",
-        quote! { ::newnum },
-        input,
-    )
+    num::num_approx(input)
 }
 
 /// Is `num!` but uses `crate` as the crate path. This is useful for macros that are used in the `newnum` crate itself.
@@ -184,12 +198,7 @@ pub fn num_approx(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
 /// ```
 #[proc_macro]
 pub fn internal_num(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
-    num_macro_helper(
-        "from_int_literal",
-        "from_float_literal",
-        quote! { crate },
-        input,
-    )
+    num::internal_num(input)
 }
 
 /// Is `num_approx!` but uses `crate` as the crate path. This is useful for macros that are used in the `newnum` crate itself.
@@ -236,65 +245,5 @@ pub fn internal_num(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
 /// ```
 #[proc_macro]
 pub fn internal_num_approx(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
-    num_macro_helper(
-        "approx_from_int_literal",
-        "approx_from_float_literal",
-        quote! { crate },
-        input,
-    )
-}
-
-fn num_macro_helper(
-    int_fn_ident: &str,
-    float_fn_ident: &str,
-    crate_path: TokenStream,
-    input: proc_macro::TokenStream,
-) -> proc_macro::TokenStream {
-    #[derive(Parse)]
-    struct Input {
-        literal: Lit,
-        #[prefix(Option<Token![:]> as punct)]
-        #[parse_if(punct.is_some())]
-        ty: Option<TokenStream>,
-    }
-
-    let Input { literal, ty } = parse_macro_input!(input as Input);
-
-    let (literal_ty, from_trait, from_fn) = if let Lit::Float(_) = literal {
-        (quote! { f64 }, quote! { FromFloatLiteral }, float_fn_ident)
-    } else {
-        (quote! { u128 }, quote! { FromIntLiteral }, int_fn_ident)
-    };
-
-    let from_fn = format_ident!("{from_fn}");
-    let ty = ty.unwrap_or_else(|| quote! { _});
-
-    quote! {
-        {
-            const MACRO_INPUT: #literal_ty = #literal;
-
-            {
-                fn num_macro_fn<NumMacroType: #crate_path::#from_trait>() -> NumMacroType {
-                    if const {
-                        if MACRO_INPUT < <NumMacroType as #crate_path::FromIntLiteral>::MIN_LITERAL as #literal_ty {
-                            panic!("literal out of range")
-                        }
-
-                        if MACRO_INPUT > <NumMacroType as #crate_path::FromIntLiteral>::MAX_LITERAL as #literal_ty {
-                            panic!("literal out of range")
-                        }
-
-                        true
-                    } {
-                        unsafe { <NumMacroType as #crate_path::#from_trait>::#from_fn(MACRO_INPUT) }
-                    } else {
-                        unreachable!()
-                    }
-                }
-
-                num_macro_fn::<#ty>()
-            }
-        }
-    }
-    .into()
+    num::internal_num_approx(input)
 }
