@@ -9,5 +9,5 @@ repository  = "https://github.com/Noam2Stein/newnum"
 version     = "0.0.11"
 
 [dependencies]
-newnum_proc_macros = { path = "../newnum_proc_macros" }
+newnum_proc_macros = "0.0.11"
 splat_attribs      = "1.0.0"
