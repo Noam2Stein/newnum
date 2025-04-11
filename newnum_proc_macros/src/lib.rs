@@ -93,6 +93,11 @@ pub fn abs_diff_derive_macro(input: proc_macro::TokenStream) -> proc_macro::Toke
 /// `MinMax` derive macro.
 /// for each method,
 /// the derive implementation maps each field using the method.
+/// Throws a compile-time error for enums unless you use the `flat_minmax` attribute.
+///
+/// The `flat_minmax` attribute makes the derived implementation use `PartialOrd` for the entire type instead of `MinMax` for each field,
+/// so each field won't be minmaxed seperately.
+/// `flat_minmax` works for enums.
 ///
 /// ### Generics
 ///
@@ -111,7 +116,7 @@ pub fn abs_diff_derive_macro(input: proc_macro::TokenStream) -> proc_macro::Toke
 /// #[derive_bound(MinMax; T: MinMax)]
 /// struct Fun<T>(T);
 /// ```
-#[proc_macro_derive(MinMax, attributes(derive_bound))]
+#[proc_macro_derive(MinMax, attributes(derive_bound, flat_minmax))]
 pub fn min_max_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     derive_min_max::min_max_derive_macro(input)
 }
