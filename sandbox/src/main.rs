@@ -1,5 +1,5 @@
 use derive_more::*;
-use newnum::*;
+use newnum::derive::*;
 
 fn main() {
     println!("Out Of Sand")

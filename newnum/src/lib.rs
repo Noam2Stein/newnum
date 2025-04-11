@@ -7,10 +7,14 @@ pub use api::*;
 pub use initialization::*;
 pub use primitive::*;
 
-pub use newnum_proc_macros::{
-    num, num_approx, AHyper, ATrig, AbsDiff, Hyper, MinMax, Num, Round, Sign, Trig, TypeMax,
-    TypeMin, Whole,
-};
+pub use newnum_proc_macros::{num, num_approx};
+
+/// Derive macros for crate traits.
+pub mod derive {
+    pub use newnum_proc_macros::{
+        AHyper, ATrig, AbsDiff, Hyper, MinMax, Num, Round, Sign, Trig, TypeMax, TypeMin, Whole,
+    };
+}
 
 #[allow(unused_imports)]
 use newnum_proc_macros::{internal_num, internal_num_approx};

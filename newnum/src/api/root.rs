@@ -1,3 +1,7 @@
+/// Trait for `trunc_sqrt` and `trunc_cbrt` methods, which compute the truncated square root and cube root of a number.
+///
+/// For non-numbers type (number-containers like `Vec2`) the logic of `sqrt` / `cbrt` should follow the logic of `Mul`.
+/// For example, if `<Vec2 as Mul>` multiplies each component seperately, it should also `sqrt` each component seperately.
 pub trait TruncRoot {
     fn trunc_sqrt(self) -> Self;
     fn trunc_cbrt(self) -> Self;
