@@ -3,6 +3,7 @@ mod util;
 mod derive_abs_diff;
 mod derive_empty;
 mod derive_min_max;
+mod derive_root;
 mod derive_round;
 mod derive_sign;
 mod derive_trig;
@@ -241,6 +242,70 @@ pub fn round_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenSt
 #[proc_macro_derive(Whole, attributes(derive_bound))]
 pub fn whole_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     derive_whole::whole_derive_macro(input)
+}
+
+//
+//
+//
+// ROOT DERIVE MACROS
+//
+//
+//
+
+/// `TruncRoot` derive macro.
+/// for each method,
+/// the derive implementation maps each field using the method.
+///
+/// This derived implementation matches the logical `Mul` derived implementation that multiplies each field seperately.
+///
+/// ### Generics
+///
+/// For types with generic parameters,
+/// `TruncRoot` will be implemented with no additional trait-bounds.
+///
+/// To add bounds to the derive, use the `derive_bound` attribute which follows this syntax:
+/// `#[derive_bound(<trait-ident>; <where-predicate>, ...)]`.
+///
+/// ### Example
+///
+/// ```
+/// use newnum::*;
+///
+/// #[derive(TruncRoot)]
+/// #[derive_bound(TruncRoot; T: TruncRoot)]
+/// struct Fun<T>(T);
+/// ```
+#[proc_macro_derive(TruncRoot, attributes(derive_bound))]
+pub fn trunc_root_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    derive_root::trunc_root_derive_macro(input)
+}
+
+/// `Root` derive macro.
+/// for each method,
+/// the derive implementation maps each field using the method.
+///
+/// This derived implementation matches the logical `Mul` derived implementation that multiplies each field seperately.
+///
+/// ### Generics
+///
+/// For types with generic parameters,
+/// `Root` will be implemented with no additional trait-bounds.
+///
+/// To add bounds to the derive, use the `derive_bound` attribute which follows this syntax:
+/// `#[derive_bound(<trait-ident>; <where-predicate>, ...)]`.
+///
+/// ### Example
+///
+/// ```
+/// use newnum::*;
+///
+/// #[derive(Root)]
+/// #[derive_bound(Root; T: Root)]
+/// struct Fun<T>(T);
+/// ```
+#[proc_macro_derive(Root, attributes(derive_bound))]
+pub fn root_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    derive_root::root_derive_macro(input)
 }
 
 //

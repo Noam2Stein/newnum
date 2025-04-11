@@ -5,5 +5,5 @@ fn main() {
     println!("Out Of Sand")
 }
 
-#[derive(Sub, AbsDiff)]
+#[derive(Sub, AbsDiff, TruncRoot)]
 struct Test(u8, u16, u32);

@@ -12,7 +12,8 @@ pub use newnum_proc_macros::{num, num_approx};
 /// Derive macros for crate traits.
 pub mod derive {
     pub use newnum_proc_macros::{
-        AHyper, ATrig, AbsDiff, Hyper, MinMax, Num, Round, Sign, Trig, TypeMax, TypeMin, Whole,
+        AHyper, ATrig, AbsDiff, Hyper, MinMax, Num, Root, Round, Sign, Trig, TruncRoot, TypeMax,
+        TypeMin, Whole,
     };
 }
 
