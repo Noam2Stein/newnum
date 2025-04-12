@@ -6,7 +6,7 @@ license     = "MIT"
 name        = "newnum"
 readme      = "../README.md"
 repository  = "https://github.com/Noam2Stein/newnum"
-version     = "0.0.11"
+version     = "0.0.12"
 
 [dependencies]
 newnum_proc_macros = "0.0.11"
