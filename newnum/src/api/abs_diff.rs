@@ -17,7 +17,7 @@ use std::ops::Sub;
 /// }
 /// ```
 pub trait AbsDiff<Rhs: Sub<Self, Output = Self::Output> = Self>: Sized + Sub<Rhs> {
-    fn abs_diff(self, rhs: Self) -> Self::Output;
+    fn abs_diff(self, rhs: Rhs) -> Self::Output;
 }
 
 macro_rules! uint_impl {

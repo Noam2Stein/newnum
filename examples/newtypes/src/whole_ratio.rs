@@ -1,7 +1,7 @@
 use std::{fmt::Display, ops::Add};
 
 use derive_more::derive::{Add, AddAssign, Mul, MulAssign, Rem, RemAssign, Sub, SubAssign};
-use newnum::*;
+use newnum::{derive::*, *};
 
 use crate::{angle::Angle, ratio::Ratio};
 

@@ -3,7 +3,7 @@ use std::fmt::Display;
 use derive_more::derive::{
     Add, AddAssign, Div, DivAssign, Mul, MulAssign, Rem, RemAssign, Sub, SubAssign,
 };
-use newnum::*;
+use newnum::{derive::*, *};
 
 use crate::{angle::Angle, whole_ratio::WholeRatio};
 
