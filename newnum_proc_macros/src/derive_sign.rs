@@ -5,44 +5,44 @@ use crate::util::{
     derive_eval_fields, derive_map_fields, derive_map_single_field_ref, derive_split_generics,
 };
 
-pub fn sign_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+pub fn signed_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
 
     let type_ident = &input.ident;
-    let (impl_generics, ty_generics, where_clause) = derive_split_generics(&input, "Sign");
+    let (impl_generics, ty_generics, where_clause) = derive_split_generics(&input, "Signed");
 
-    let is_positive_output = derive_map_single_field_ref(&input, "Sign", |field, field_type| {
+    let is_positive_output = derive_map_single_field_ref(&input, "Signed", |field, field_type| {
         quote! {
-            <#field_type as ::newnum::Sign>::is_positive(#field)
+            <#field_type as ::newnum::Signed>::is_positive(#field)
         }
     });
 
-    let is_negative_output = derive_map_single_field_ref(&input, "Sign", |field, field_type| {
+    let is_negative_output = derive_map_single_field_ref(&input, "Signed", |field, field_type| {
         quote! {
-            <#field_type as ::newnum::Sign>::is_negative(#field)
+            <#field_type as ::newnum::Signed>::is_negative(#field)
         }
     });
-    let is_zero_output = derive_map_single_field_ref(&input, "Sign", |field, field_type| {
+    let is_zero_output = derive_map_single_field_ref(&input, "Signed", |field, field_type| {
         quote! {
-            <#field_type as ::newnum::Sign>::is_zero(#field)
+            <#field_type as ::newnum::Signed>::is_zero(#field)
         }
     });
 
     let is_bin_positive_output =
-        derive_map_single_field_ref(&input, "Sign", |field, field_type| {
+        derive_map_single_field_ref(&input, "Signed", |field, field_type| {
             quote! {
-                <#field_type as ::newnum::Sign>::is_bin_positive(#field)
+                <#field_type as ::newnum::Signed>::is_bin_positive(#field)
             }
         });
     let is_bin_negative_output =
-        derive_map_single_field_ref(&input, "Sign", |field, field_type| {
+        derive_map_single_field_ref(&input, "Signed", |field, field_type| {
             quote! {
-                <#field_type as ::newnum::Sign>::is_bin_negative(#field)
+                <#field_type as ::newnum::Signed>::is_bin_negative(#field)
             }
         });
 
     quote! {
-        impl #impl_generics ::newnum::Sign for #type_ident #ty_generics #where_clause {
+        impl #impl_generics ::newnum::Signed for #type_ident #ty_generics #where_clause {
             type BoolMapped = bool;
 
             fn is_positive(&self) -> Self::BoolMapped {

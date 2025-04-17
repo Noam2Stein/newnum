@@ -14,7 +14,7 @@ pub mod derive {
     pub use newnum_proc_macros::{
         AHyper, ATrig, AbsDiff, AlwaysNegative, AlwaysPositive, AlwaysZero, FullySigned, Hyper,
         MinMax, Negative, NegativeOrZero, NotNegative, NotPositive, NotZero, Num, Positive,
-        PositiveOrNegative, PositiveOrZero, Root, Round, Sign, Trig, TruncRoot, TypeMax, TypeMin,
+        PositiveOrNegative, PositiveOrZero, Root, Round, Signed, Trig, TruncRoot, TypeMax, TypeMin,
         Whole, Zero,
     };
 }
@@ -51,7 +51,7 @@ pub trait Num:
     + MinMax
     + TruncRoot
     + Round
-    + Sign<BoolMapped = bool>
+    + Signed<BoolMapped = bool>
     + PartialEq
     + PartialOrd
     + Add<Output = Self>

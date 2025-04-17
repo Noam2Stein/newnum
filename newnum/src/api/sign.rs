@@ -5,7 +5,7 @@
 /// doesn't have functions like `abs`,
 /// because for example if the type can't represent positive values but only negative ones,
 /// it can't return a positive value out of ```abs```.
-pub trait Sign {
+pub trait Signed {
     /// The bool equivalent of `Self`.
     ///
     /// For a number this is always `bool`,
@@ -78,7 +78,7 @@ pub trait Sign {
 ///
 /// Doesn't mean the type is always positive,
 /// For that use `OnlyPositive`.
-pub trait Positive: Sign {
+pub trait Positive: Signed {
     fn abs(self) -> Self;
 }
 
@@ -86,14 +86,14 @@ pub trait Positive: Sign {
 ///
 /// Doesn't mean the type is always negative,
 /// For that use `OnlyNegative`.
-pub trait Negative: Sign {
+pub trait Negative: Signed {
     fn neg_abs(self) -> Self;
 }
 /// Trait for types that can represent zero (number / number-container).
 ///
 /// Doesn't mean the type is always zero,
 /// For that use `OnlyZero`.
-pub trait Zero: Sign {
+pub trait Zero: Signed {
     fn zero() -> Self;
 }
 
@@ -109,19 +109,19 @@ pub trait Zero: Sign {
 ///
 /// * In the future when rust supports negative traits (`!SomeTrait`),
 /// this trait will be replaced with `!Positive`.
-pub trait NotPositive: Sign {}
+pub trait NotPositive: Signed {}
 
 /// Trait for types that are never negative (number / number-container).
 ///
 /// * In the future when rust supports negative traits (`!SomeTrait`),
 /// this trait will be replaced with `!Negative`.
-pub trait NotNegative: Sign {}
+pub trait NotNegative: Signed {}
 
 /// Trait for types that are never zero (number / number-container).
 ///
 /// * In the future when rust supports negative traits (`!SomeTrait`),
 /// this trait will be replaced with `!Zero`.
-pub trait NotZero: Sign {}
+pub trait NotZero: Signed {}
 
 //
 //
@@ -210,7 +210,7 @@ impl<T: Positive + Negative + Zero> FullySigned for T {}
 /// - that if `Self` can be negative, it can represent `-1`.
 ///
 /// If this requirement wasn't met, the `signum` function would be logically impossible to implement.
-pub trait Signum: Sign {
+pub trait Signum: Signed {
     /// Returns either `1`, `-1` or `0` based on the number's `3-value-sign`:
     /// - `self > 0 => 1`,
     /// - `self < 0 => -1`,
@@ -249,7 +249,7 @@ pub trait Signum: Sign {
 
 macro_rules! uint_impl {
     ($type:ident) => {
-        impl Sign for $type {
+        impl Signed for $type {
             type BoolMapped = bool;
 
             fn is_positive(&self) -> Self::BoolMapped {
@@ -302,7 +302,7 @@ uint_impl!(usize);
 
 macro_rules! sint_impl {
     ($type:ident) => {
-        impl Sign for $type {
+        impl Signed for $type {
             type BoolMapped = bool;
 
             fn is_positive(&self) -> Self::BoolMapped {
@@ -363,7 +363,7 @@ sint_impl!(isize);
 
 macro_rules! float_impl {
     ($type:ident) => {
-        impl Sign for $type {
+        impl Signed for $type {
             type BoolMapped = bool;
 
             fn is_positive(&self) -> Self::BoolMapped {
