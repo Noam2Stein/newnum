@@ -93,7 +93,9 @@ pub trait Negative: Sign {
 ///
 /// Doesn't mean the type is always zero,
 /// For that use `OnlyZero`.
-pub trait Zero: Sign {}
+pub trait Zero: Sign {
+    fn zero() -> Self;
+}
 
 //
 //
@@ -274,7 +276,11 @@ macro_rules! uint_impl {
                 self
             }
         }
-        impl Zero for $type {}
+        impl Zero for $type {
+            fn zero() -> Self {
+                0
+            }
+        }
         impl NotNegative for $type {}
 
         impl Signum for $type {
@@ -328,7 +334,11 @@ macro_rules! sint_impl {
                 -self.abs()
             }
         }
-        impl Zero for $type {}
+        impl Zero for $type {
+            fn zero() -> Self {
+                0
+            }
+        }
 
         impl Signum for $type {
             fn signumt(self) -> Self {
@@ -385,7 +395,11 @@ macro_rules! float_impl {
                 -self.abs()
             }
         }
-        impl Zero for $type {}
+        impl Zero for $type {
+            fn zero() -> Self {
+                0.0
+            }
+        }
 
         impl Signum for $type {
             fn signumt(self) -> Self {

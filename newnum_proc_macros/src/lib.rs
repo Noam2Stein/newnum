@@ -49,6 +49,65 @@ pub fn sign_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStr
     derive_sign::sign_derive_macro(input)
 }
 
+#[proc_macro_derive(Positive, attributes(derive_bound))]
+pub fn positive_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    derive_sign::positive_derive_macro(input)
+}
+#[proc_macro_derive(Negative, attributes(derive_bound))]
+pub fn negative_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    derive_sign::negative_derive_macro(input)
+}
+#[proc_macro_derive(Zero, attributes(derive_bound, zero))]
+pub fn zero_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    derive_sign::zero_derive_macro(input)
+}
+
+#[proc_macro_derive(NotPositive, attributes(derive_bound))]
+pub fn not_positive_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    derive_sign::not_positive_derive_macro(input)
+}
+#[proc_macro_derive(NotNegative, attributes(derive_bound))]
+pub fn not_negative_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    derive_sign::not_negative_derive_macro(input)
+}
+#[proc_macro_derive(NotZero, attributes(derive_bound))]
+pub fn not_zero_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    derive_sign::not_zero_derive_macro(input)
+}
+
+#[proc_macro_derive(AlwaysPositive, attributes(derive_bound))]
+pub fn always_positive_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    derive_sign::always_positive_derive_macro(input)
+}
+#[proc_macro_derive(AlwaysNegative, attributes(derive_bound))]
+pub fn always_negative_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    derive_sign::always_negative_derive_macro(input)
+}
+#[proc_macro_derive(AlwaysZero, attributes(derive_bound, zero))]
+pub fn always_zero_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    derive_sign::always_zero_derive_macro(input)
+}
+
+#[proc_macro_derive(PositiveOrZero, attributes(derive_bound, zero))]
+pub fn positive_or_zero_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    derive_sign::positive_or_zero_derive_macro(input)
+}
+#[proc_macro_derive(NegativeOrZero, attributes(derive_bound, zero))]
+pub fn negative_or_zero_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    derive_sign::negative_or_zero_derive_macro(input)
+}
+#[proc_macro_derive(PositiveOrNegative, attributes(derive_bound))]
+pub fn positive_or_negative_derive_macro(
+    input: proc_macro::TokenStream,
+) -> proc_macro::TokenStream {
+    derive_sign::positive_or_negative_derive_macro(input)
+}
+
+#[proc_macro_derive(FullySigned, attributes(derive_bound, zero))]
+pub fn fully_signed_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    derive_sign::fully_signed_derive_macro(input)
+}
+
 //
 //
 //

@@ -26,6 +26,9 @@ pub fn whole_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenSt
             fn atrunc(self) -> Self {
                 self
             }
+            fn fract(self) -> Self {
+                <Self as ::newnum::Zero>::zero()
+            }
         }
 
         impl #impl_generics ::newnum::WholeEquivalent for #type_ident #ty_generics #where_clause {

@@ -1,14 +1,16 @@
 use std::{fmt::Display, ops::Add};
 
-use derive_more::derive::{Add, AddAssign, Mul, MulAssign, Rem, RemAssign, Sub, SubAssign};
+use derive_more::derive::{
+    Add, AddAssign, Div, DivAssign, Mul, MulAssign, Rem, RemAssign, Sub, SubAssign,
+};
 use newnum::{derive::*, *};
 
 use crate::{angle::Angle, ratio::Ratio};
 
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-#[derive(Add, Sub, Mul, Rem)]
-#[derive(AddAssign, SubAssign, MulAssign, RemAssign)]
-#[derive(Whole)]
+#[derive(Add, Sub, Mul, Div, Rem)]
+#[derive(AddAssign, SubAssign, MulAssign, DivAssign, RemAssign)]
+#[derive(Num, Whole, Sign, FullySigned, TruncRoot, MinMax, AbsDiff)]
 pub struct WholeRatio(pub i64);
 
 impl Display for WholeRatio {

@@ -10,7 +10,7 @@ use crate::{angle::Angle, whole_ratio::WholeRatio};
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
 #[derive(Add, Sub, Mul, Div, Rem)]
 #[derive(AddAssign, SubAssign, MulAssign, DivAssign, RemAssign)]
-#[derive(Round)]
+#[derive(Round, Sign, FullySigned)]
 pub struct Ratio(pub f64);
 
 impl Display for Ratio {
