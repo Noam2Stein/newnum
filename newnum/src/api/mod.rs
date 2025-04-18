@@ -1,6 +1,6 @@
 mod abs_diff;
 mod floating;
-mod literal;
+mod from_literal;
 mod min_max;
 mod root;
 mod round;
@@ -11,7 +11,7 @@ mod type_min_max;
 mod whole;
 pub use abs_diff::*;
 pub use floating::*;
-pub use literal::*;
+pub use from_literal::*;
 pub use min_max::*;
 pub use root::*;
 pub use round::*;
