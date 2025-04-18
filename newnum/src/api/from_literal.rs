@@ -71,7 +71,7 @@ pub trait FromFloatLiteral: FromIntLiteral {
 macro_rules! int_impl {
     ($ty:ident) => {
         impl FromIntLiteral for $ty {
-            const MIN_LITERAL: i128 = 0;
+            const MIN_LITERAL: i128 = $ty::MIN as i128;
             const MAX_LITERAL: i128 = $ty::MAX as i128;
 
             unsafe fn from_int_literal(value: i128) -> Self {

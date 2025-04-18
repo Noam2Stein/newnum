@@ -47,18 +47,19 @@ fn num_macro_helper(
 ) -> proc_macro::TokenStream {
     #[derive(Parse)]
     struct Input {
+        neg: Option<Token![-]>,
         literal: Lit,
         #[prefix(Option<Token![:]> as punct)]
         #[parse_if(punct.is_some())]
         ty: Option<TokenStream>,
     }
 
-    let Input { literal, ty } = parse_macro_input!(input as Input);
+    let Input { neg, literal, ty } = parse_macro_input!(input as Input);
 
     let (literal_ty, from_trait, from_fn) = if let Lit::Float(_) = literal {
         (quote! { f64 }, quote! { FromFloatLiteral }, float_fn_ident)
     } else {
-        (quote! { u128 }, quote! { FromIntLiteral }, int_fn_ident)
+        (quote! { i128 }, quote! { FromIntLiteral }, int_fn_ident)
     };
 
     let from_fn = format_ident!("{from_fn}");
@@ -66,7 +67,7 @@ fn num_macro_helper(
 
     quote! {
         {
-            const MACRO_INPUT: #literal_ty = #literal;
+            const MACRO_INPUT: #literal_ty = #neg #literal;
 
             {
                 fn num_macro_fn<NumMacroType: #crate_path::#from_trait>() -> NumMacroType {
