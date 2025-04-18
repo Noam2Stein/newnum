@@ -11,6 +11,17 @@ pub fn signed_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenS
     let type_ident = &input.ident;
     let (impl_generics, ty_generics, where_clause) = derive_split_generics(&input, "Signed");
 
+    let sign_output = derive_map_single_field_ref(&input, "Signed", |field, field_type| {
+        quote! {
+            <#field_type as ::newnum::Signed>::sign(#field)
+        }
+    });
+    let bit_sign_output = derive_map_single_field_ref(&input, "Signed", |field, field_type| {
+        quote! {
+            <#field_type as ::newnum::Signed>::bit_sign(#field)
+        }
+    });
+
     let is_positive_output = derive_map_single_field_ref(&input, "Signed", |field, field_type| {
         quote! {
             <#field_type as ::newnum::Signed>::is_positive(#field)
@@ -43,7 +54,16 @@ pub fn signed_derive_macro(input: proc_macro::TokenStream) -> proc_macro::TokenS
 
     quote! {
         impl #impl_generics ::newnum::Signed for #type_ident #ty_generics #where_clause {
+            type SignMapped = ::newnum::Sign;
+            type BitSignMapped = ::newnum::BitSign;
             type BoolMapped = bool;
+
+            fn sign(&self) -> Self::SignMapped {
+                #sign_output
+            }
+            fn bit_sign(&self) -> Self::BitSignMapped {
+                #bit_sign_output
+            }
 
             fn is_positive(&self) -> Self::BoolMapped {
                 #is_positive_output

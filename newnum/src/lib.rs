@@ -49,7 +49,7 @@ pub trait Num:
     + MinMax
     + TruncRoot
     + Round
-    + Signed<BoolMapped = bool>
+    + Signed<SignMapped = Sign, BitSignMapped = BitSign, BoolMapped = bool>
     + PartialEq
     + PartialOrd
     + Add<Output = Self>
