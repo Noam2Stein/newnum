@@ -1,3 +1,38 @@
+//
+//
+//
+// SIGN TYPES
+//
+//
+//
+
+/// Represents a `3-value-sign`, meaning it can be either positive, negative or zero.
+///
+/// * For a `2-value-sign` that may be positive or negative, use [`BitSign`].
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub enum Sign {
+    Negative,
+    Zero,
+    Positive,
+}
+
+/// Represents a `2-value-sign`, meaning it can be either positive, or negative.
+///
+/// * For a `3-value-sign` that may be positive negative or zero, use [`Sign`].
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub enum BitSign {
+    Negative,
+    Positive,
+}
+
+//
+//
+//
+// SIGNED
+//
+//
+//
+
 /// Trait for types that have a mathamatical sign (number / number-container).
 ///
 /// doesn't require the type to represent positive / negative / zero values.
