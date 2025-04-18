@@ -4,5 +4,9 @@ use derive_more::*;
 use newnum::{derive::*, *};
 
 fn main() {
-    println!("{}", num!(-5: i32))
+    println!("{}", convert(453_u128))
+}
+
+fn convert(a: impl Prim) -> i32 {
+    a.as_num()
 }

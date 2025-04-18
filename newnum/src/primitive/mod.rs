@@ -38,7 +38,7 @@ pub trait Prim:
     + Copy
     + Default
 {
-    fn from_num<T: AsPrim>(value: T) -> Self;
+    fn from_num<T: Prim>(value: T) -> Self;
 }
 
 macro_rules! code_for_prims {
@@ -51,7 +51,7 @@ macro_rules! code_for_prims {
                 fn $as_fn(self) -> $type;
             )*
 
-            fn as_num<T: Prim>(self) -> T {
+            fn as_num<T: Prim>(self) -> T where Self: Prim {
                 T::from_num(self)
             }
         }
